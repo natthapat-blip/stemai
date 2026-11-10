@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>STEM Lab: เครื่องกลอย่างง่าย ม.1 (Simple Machines Lab)</title>
+  <title>STEM Lab: เครื่องกลอย่างง่าย ม.1 (Simple Machines Lab) พร้อมระบบคะแนนรายคน</title>
   
   <!-- Google Fonts: Prompt & Noto Sans Thai -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700&family=Prompt:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+
     :root {
       --primary: #2563eb;
       --primary-dark: #1d4ed8;
@@ -66,13 +67,14 @@
     }
 
     .header-container {
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 0 auto;
       padding: 0.75rem 1.25rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
+      flex-wrap: wrap;
     }
 
     .logo-area { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
@@ -83,453 +85,652 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1.5rem; box-shadow: 0 4px 10px rgba(37,99,235,0.3);
     }
-    .logo-text h1 { font-size: 1.2rem; color: var(--text-main); line-height: 1.2; }
+    .logo-text h1 { font-size: 1.15rem; color: var(--text-main); line-height: 1.2; }
     .logo-text span { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
 
-    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* Student Profile & Status in Header */
+    .student-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.88rem;
+    }
+    .student-profile-pill:hover {
+      background: #e2e8f0;
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+    .student-profile-pill.active {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+    .student-profile-pill.unselected {
+      border: 2px dashed #f59e0b;
+      background: #fffbeb;
+      color: #92400e;
+      animation: pulseAttention 2s infinite;
+    }
+    @keyframes pulseAttention {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(245, 158, 11, 0); }
+    }
+
+    .db-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+      cursor: help;
+    }
+    .db-status-pill.offline {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .btn-teacher-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      padding: 0.42rem 0.95rem;
+      border-radius: var(--radius-full);
+      border: none;
+      font-family: 'Prompt', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+      transition: all 0.2s;
+    }
+    .btn-teacher-dashboard:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    }
 
     .star-badge {
       display: flex; align-items: center; gap: 0.4rem;
       background: #fffbeb; border: 2px solid #fde68a;
-      padding: 0.4rem 0.85rem; border-radius: var(--radius-full);
+      padding: 0.35rem 0.85rem; border-radius: var(--radius-full);
       font-family: 'Prompt', sans-serif; font-weight: 700;
-      color: var(--accent-dark); font-size: 1rem;
+      color: var(--accent-dark); font-size: 0.95rem;
       box-shadow: var(--shadow-sm);
     }
     .star-badge span.star-icon {
-      font-size: 1.2rem; color: var(--accent);
+      font-size: 1.15rem; color: var(--accent);
       filter: drop-shadow(0 1px 2px rgba(245,158,11,0.5));
     }
 
     .btn-icon {
-      min-width: 44px; min-height: 44px;
-      border: 2px solid var(--border); background: #ffffff;
-      border-radius: var(--radius-md);
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; cursor: pointer; color: var(--text-main);
-      transition: all 0.2s;
+      width: 40px; height: 40px; border-radius: var(--radius-full);
+      border: 1px solid var(--border); background: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; cursor: pointer; transition: all 0.2s;
+      color: var(--text-main);
     }
-    .btn-icon:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); }
+    .btn-icon:hover { background: #f1f5f9; border-color: #cbd5e1; }
 
     .btn-nav-home {
-      display: flex; align-items: center; gap: 0.4rem;
-      padding: 0.45rem 0.9rem; border-radius: var(--radius-md);
-      background: var(--primary-light); color: var(--primary-dark);
-      border: 1px solid #bfdbfe; font-family: 'Prompt', sans-serif;
-      font-weight: 600; font-size: 0.95rem; cursor: pointer;
-      min-height: 44px; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: #f1f5f9; border: 1px solid var(--border);
+      padding: 0.45rem 0.9rem; border-radius: var(--radius-full);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 0.9rem;
+      cursor: pointer; transition: all 0.2s; color: var(--text-main);
     }
-    .btn-nav-home:hover { background: var(--primary); color: #ffffff; }
+    .btn-nav-home:hover { background: var(--primary-light); color: var(--primary-dark); }
 
     main {
-      flex: 1; max-width: 1240px; width: 100%;
-      margin: 0 auto; padding: 1.25rem;
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 3rem;
     }
 
     .view-section { display: none; animation: fadeIn 0.3s ease; }
     .view-section.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    /* Hero Banner */
+    /* HOME HERO & GREETING */
     .hero-banner {
-      background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
-      border: 2px solid #bfdbfe; border-radius: var(--radius-lg);
-      padding: 1.75rem 2rem; margin-bottom: 2rem;
-      position: relative; overflow: hidden; box-shadow: var(--shadow-sm);
+      background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+      color: white; border-radius: var(--radius-lg);
+      padding: 2rem 2.25rem; margin-bottom: 2rem;
+      box-shadow: var(--shadow-md); position: relative;
+      overflow: hidden;
     }
-    .hero-content { display: flex; align-items: center; gap: 1.5rem; }
-    .mascot-avatar {
-      width: 80px; height: 80px; background: #ffffff;
-      border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center;
-      font-size: 3rem; box-shadow: var(--shadow-md); border: 3px solid var(--primary);
-      flex-shrink: 0; animation: floatMascot 3s ease-in-out infinite;
+    .hero-banner::after {
+      content: '⚙️'; position: absolute; right: -20px; bottom: -30px;
+      font-size: 10rem; opacity: 0.08; pointer-events: none;
     }
-    @keyframes floatMascot { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-    .hero-text h2 { font-size: 1.75rem; color: #1e3a8a; margin-bottom: 0.3rem; }
-    .hero-text p { font-size: 1.05rem; color: #334155; max-width: 800px; }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.2); backdrop-filter: blur(4px);
+      padding: 0.25rem 0.75rem; border-radius: var(--radius-full);
+      font-size: 0.85rem; font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .hero-text h2 { font-size: 1.85rem; line-height: 1.3; margin-bottom: 0.5rem; }
+    .hero-text p { font-size: 1.05rem; opacity: 0.95; margin-bottom: 1rem; line-height: 1.6; }
     .hero-rule-pill {
-      display: inline-block; margin-top: 0.6rem;
-      background: #ffffff; color: #1d4ed8; font-weight: 700;
-      padding: 0.35rem 1rem; border-radius: var(--radius-full);
-      font-size: 0.95rem; border: 1.5px solid #93c5fd;
+      display: inline-block; background: #ffffff; color: var(--primary-dark);
+      padding: 0.5rem 1rem; border-radius: var(--radius-md);
+      font-weight: 600; font-size: 0.95rem; box-shadow: var(--shadow-sm);
     }
 
-    /* Grid of Machines */
+    /* Active Student Welcome Banner */
+    .active-student-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #eff6ff;
+      border: 2px solid #bfdbfe;
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .student-welcome-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .student-avatar-large {
+      font-size: 2.2rem;
+      background: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* MACHINES GRID */
     .machines-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem; margin-bottom: 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
     }
     .machine-card {
-      background: var(--card-bg); border-radius: var(--radius-lg);
+      background: var(--card-bg); border-radius: var(--radius-md);
       border: 2px solid var(--border); padding: 1.5rem;
-      box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
-      justify-content: space-between; transition: all 0.25s ease;
-      position: relative;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: all 0.25s ease; position: relative; overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
-    .machine-card:hover:not(.locked) { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
-    .machine-card.active-card { border-color: #93c5fd; background: linear-gradient(to bottom, #ffffff, #f8faff); }
-    .machine-card.locked { opacity: 0.75; background: #fafafa; border-style: dashed; }
-    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .machine-card.active-card:hover {
+      transform: translateY(-4px); border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
     .card-icon-box {
-      width: 56px; height: 56px; border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center; font-size: 2rem;
+      width: 54px; height: 54px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
     }
     .card-stars-earned {
-      display: flex; align-items: center; gap: 0.25rem;
-      background: #fffbeb; padding: 0.3rem 0.6rem; border-radius: var(--radius-full);
-      font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 0.9rem;
-      color: var(--accent-dark); border: 1px solid #fef3c7;
+      font-family: 'Prompt', sans-serif; font-weight: 700;
+      font-size: 0.95rem; color: var(--accent-dark);
+      background: #fffbeb; padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full); border: 1px solid #fde68a;
     }
-    .card-title { font-size: 1.35rem; color: var(--text-main); margin-bottom: 0.4rem; }
-    .card-subtitle { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1rem; min-height: 48px; }
+    .card-title { font-size: 1.25rem; color: var(--text-main); margin-bottom: 0.35rem; }
+    .card-subtitle { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; min-height: 2.7rem; }
     .card-formula-tag {
-      background: #f1f5f9; color: #475569; font-size: 0.85rem;
-      padding: 0.35rem 0.65rem; border-radius: var(--radius-sm);
-      display: inline-block; margin-bottom: 1.25rem; font-family: monospace; font-weight: 600;
+      background: #f8fafc; border: 1px dashed var(--border);
+      padding: 0.4rem 0.65rem; border-radius: var(--radius-sm);
+      font-family: 'Prompt', monospace; font-size: 0.8rem;
+      color: var(--primary-dark); font-weight: 600; margin-bottom: 1.25rem;
     }
     .btn-enter-room {
-      width: 100%; min-height: 48px; background: var(--primary); color: white;
-      border: none; border-radius: var(--radius-md); font-family: 'Prompt', sans-serif;
-      font-size: 1.05rem; font-weight: 600; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s;
+      width: 100%; background: var(--primary); color: white;
+      border: none; padding: 0.75rem 1rem; border-radius: var(--radius-md);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 1rem;
+      cursor: pointer; transition: all 0.2s; display: flex;
+      align-items: center; justify-content: center; gap: 0.5rem;
     }
     .btn-enter-room:hover { background: var(--primary-dark); }
-    .badge-locked {
-      background: #e2e8f0; color: #64748b; font-size: 0.85rem;
-      padding: 0.5rem 1rem; border-radius: var(--radius-md);
-      text-align: center; font-weight: 600;
-    }
 
-    /* Overall Summary Card */
+    /* SUMMARY CARD */
     .summary-card {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem;
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1.5rem; flex-wrap: wrap; box-shadow: var(--shadow-sm);
     }
-    .summary-info h3 { font-size: 1.2rem; margin-bottom: 0.2rem; }
+    .summary-info h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.25rem; }
     .summary-info p { color: var(--text-muted); font-size: 0.95rem; }
 
-    /* Room Header & Tabs */
-    .room-header {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; display: flex; flex-wrap: wrap;
-      justify-content: space-between; align-items: center; gap: 1rem; box-shadow: var(--shadow-sm);
+    .btn-quick {
+      background: #f1f5f9; border: 1px solid var(--border);
+      padding: 0.6rem 1.25rem; border-radius: var(--radius-md);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 0.9rem;
+      color: var(--text-main); cursor: pointer; transition: all 0.2s;
     }
-    .room-title-area { display: flex; align-items: center; gap: 0.75rem; }
-    .room-title-area .room-icon { font-size: 2.2rem; }
-    .room-title-area h2 { font-size: 1.5rem; color: var(--text-main); }
-    .room-title-area p { color: var(--text-muted); font-size: 0.92rem; }
+    .btn-quick:hover { background: #fee2e2; border-color: #fca5a5; color: var(--danger); }
 
-    .room-tabs {
-      display: flex; flex-wrap: wrap; gap: 0.5rem;
-      background: #f1f5f9; padding: 0.35rem; border-radius: var(--radius-md);
+    /* ROOM TABS & CONTROLS */
+    .room-header {
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem; box-shadow: var(--shadow-sm);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 1rem; flex-wrap: wrap;
+    }
+    .room-title-area { display: flex; align-items: center; gap: 1rem; }
+    .room-icon-badge {
+      width: 52px; height: 52px; border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+    }
+    .room-title-area h2 { font-size: 1.4rem; line-height: 1.2; }
+    .room-title-area p { font-size: 0.88rem; color: var(--text-muted); }
+
+    .room-tabs-nav {
+      display: flex; gap: 0.4rem; flex-wrap: wrap;
+      background: #f1f5f9; padding: 0.35rem; border-radius: var(--radius-full);
+      border: 1px solid var(--border);
     }
     .tab-btn {
-      min-height: 44px; padding: 0.4rem 1rem; border: none; background: transparent;
-      border-radius: var(--radius-sm); font-family: 'Prompt', sans-serif;
-      font-size: 0.95rem; font-weight: 600; color: var(--text-muted); cursor: pointer;
-      display: flex; align-items: center; gap: 0.4rem; transition: all 0.2s;
+      border: none; background: transparent; padding: 0.5rem 1.1rem;
+      border-radius: var(--radius-full); font-family: 'Prompt', sans-serif;
+      font-weight: 600; font-size: 0.9rem; color: var(--text-muted);
+      cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;
     }
-    .tab-btn.active { background: #ffffff; color: var(--primary); box-shadow: var(--shadow-sm); }
-    .tab-btn:hover:not(.active) { color: var(--text-main); }
-
-    .tab-content-panel { display: none; animation: fadeIn 0.25s ease; }
-    .tab-content-panel.active { display: block; }
-
-    /* Simulation Layout Grid */
-    .sim-layout {
-      display: grid; grid-template-columns: 1fr 340px; gap: 1.25rem; margin-bottom: 1.5rem;
+    .tab-btn:hover { color: var(--text-main); }
+    .tab-btn.active {
+      background: #ffffff; color: var(--primary);
+      box-shadow: var(--shadow-sm);
     }
-    @media (max-width: 980px) { .sim-layout { grid-template-columns: 1fr; } }
+
+    .tab-content-panel { display: none; }
+    .tab-content-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    /* LAB WORKBENCH LAYOUT */
+    .lab-workbench {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 960px) {
+      .lab-workbench { grid-template-columns: 1fr; }
+    }
 
     .sim-stage-card {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.25rem; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; position: relative;
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem;
+      box-shadow: var(--shadow-sm); display: flex; flex-direction: column;
     }
-    .stage-status-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;
+    .sim-stage-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1rem; gap: 0.5rem; flex-wrap: wrap;
     }
+    .stage-title { font-size: 1.1rem; color: var(--text-main); font-weight: 700; }
     .balance-status-badge {
-      display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.9rem;
-      border-radius: var(--radius-full); font-family: 'Prompt', sans-serif; font-weight: 700;
-      font-size: 0.95rem; transition: all 0.3s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.35rem 0.85rem; border-radius: var(--radius-full);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 0.85rem;
     }
-    .balance-status-badge.balanced { background: var(--success-light); color: #065f46; border: 1.5px solid #a7f3d0; }
-    .balance-status-badge.tilted-left { background: #eff6ff; color: #1e40af; border: 1.5px solid #bfdbfe; }
-    .balance-status-badge.tilted-right { background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; }
-
-    .hint-drag-tag {
-      font-size: 0.85rem; color: var(--text-muted); background: #f8fafc;
-      border: 1px solid var(--border); padding: 0.25rem 0.6rem; border-radius: var(--radius-sm);
-      display: flex; align-items: center; gap: 0.3rem;
-    }
+    .balance-status-badge.balanced { background: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+    .balance-status-badge.tilted { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+    .balance-status-badge.info { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
 
     .svg-container {
-      width: 100%; height: 380px;
-      background: radial-gradient(circle at 50% 30%, #ffffff 0%, #f1f5f9 100%);
-      border-radius: var(--radius-md); border: 2px solid #e2e8f0;
-      position: relative; touch-action: none; user-select: none;
-    }
-    svg.sim-svg { width: 100%; height: 100%; overflow: visible; }
-
-    .stage-quick-actions {
-      display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; align-items: center;
-    }
-    .btn-quick {
-      min-height: 44px; padding: 0.4rem 0.85rem; background: #f1f5f9;
+      width: 100%; min-height: 380px; background: #f8fafc;
       border: 1px solid var(--border); border-radius: var(--radius-md);
-      font-size: 0.88rem; font-weight: 600; color: #334155; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.2s;
+      position: relative; overflow: hidden; display: flex;
+      align-items: center; justify-content: center;
+      touch-action: none; user-select: none;
     }
-    .btn-quick:hover { background: var(--primary-light); border-color: #93c5fd; color: var(--primary-dark); }
-    .btn-simulate-action {
-      min-height: 44px; padding: 0.4rem 1.25rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-      color: white; border: none; border-radius: var(--radius-md);
-      font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 0.95rem;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem;
-      box-shadow: 0 2px 4px rgba(245,158,11,0.3); margin-left: auto; transition: all 0.2s;
-    }
-    .btn-simulate-action:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .sim-svg { width: 100%; height: 100%; max-height: 400px; display: block; }
 
-    /* Side Controls Panel */
-    .side-controls-panel { display: flex; flex-direction: column; gap: 1rem; }
-    .control-group-card {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-md);
-      padding: 1rem; box-shadow: var(--shadow-sm);
+    /* TELEMETRY BAR */
+    .telemetry-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem; margin-top: 1rem;
     }
-    .control-group-title {
-      font-size: 0.95rem; color: var(--text-muted); margin-bottom: 0.65rem;
+    .tele-cell {
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.65rem 0.85rem;
+    }
+    .tele-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+    .tele-val {
+      font-family: 'Prompt', monospace; font-size: 1.15rem;
+      font-weight: 700; color: var(--text-main);
+    }
+    .tele-val.primary { color: var(--primary); }
+    .tele-val.success { color: var(--success); }
+    .tele-val.accent { color: var(--accent-dark); }
+    .tele-val.purple { color: var(--purple); }
+
+    /* CONTROLS PANEL */
+    .controls-panel {
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem;
+      box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 1rem;
+    }
+    .panel-block-title {
+      font-size: 1rem; color: var(--text-main); font-weight: 700;
+      border-bottom: 1px solid var(--border); padding-bottom: 0.4rem;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .slider-row { margin-bottom: 0.85rem; }
-    .slider-row:last-child { margin-bottom: 0; }
+    .control-group { display: flex; flex-direction: column; gap: 0.35rem; }
     .slider-label-row {
-      display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.88rem; color: var(--text-main); font-weight: 500;
     }
-    .slider-val-tag { font-family: 'Prompt', sans-serif; color: var(--primary); font-weight: 700; }
+    .slider-val-tag {
+      font-family: 'Prompt', monospace; font-weight: 700;
+      background: #eff6ff; color: var(--primary);
+      padding: 0.15rem 0.5rem; border-radius: var(--radius-sm); font-size: 0.85rem;
+    }
+    input[type="range"] {
+      width: 100%; height: 8px; border-radius: 4px;
+      background: #e2e8f0; outline: none; -webkit-appearance: none;
+      cursor: pointer;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 22px; height: 22px;
+      border-radius: 50%; background: var(--primary);
+      border: 3px solid #ffffff; box-shadow: var(--shadow-sm);
+      cursor: grab; transition: transform 0.1s;
+    }
+    input[type="range"]::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.15); }
 
-    input[type=range] {
-      width: 100%; height: 8px; border-radius: 4px; background: #e2e8f0;
-      outline: none; -webkit-appearance: none; cursor: pointer;
+    /* BUTTONS */
+    .btn-action-primary {
+      background: var(--primary); color: white; border: none;
+      padding: 0.65rem 1rem; border-radius: var(--radius-md);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s; display: flex;
+      align-items: center; justify-content: center; gap: 0.4rem;
     }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%;
-      background: var(--primary); border: 2px solid #ffffff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25); cursor: pointer; transition: transform 0.1s;
+    .btn-action-primary:hover { background: var(--primary-dark); }
+    .btn-action-secondary {
+      background: #f1f5f9; color: var(--text-main); border: 1px solid var(--border);
+      padding: 0.65rem 1rem; border-radius: var(--radius-md);
+      font-family: 'Prompt', sans-serif; font-weight: 600; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
     }
-    input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+    .btn-action-secondary:hover { background: #e2e8f0; }
 
-    .stepper-box { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.35rem; }
-    .btn-step {
-      min-width: 44px; min-height: 38px; background: #f1f5f9; border: 1px solid var(--border);
-      border-radius: var(--radius-sm); font-size: 1.1rem; font-weight: 700; color: var(--text-main);
-      cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    /* MISSIONS LIST */
+    .missions-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
     }
-    .btn-step:hover { background: #e2e8f0; }
-
-    /* Metrics Dashboard */
-    .metrics-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1rem; margin-bottom: 1.5rem;
-    }
-    .metric-card {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-md);
-      padding: 1rem 1.25rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1rem;
-    }
-    .metric-icon-box {
-      width: 48px; height: 48px; border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;
-    }
-    .metric-info h4 { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
-    .metric-value {
-      font-size: 1.45rem; font-family: 'Prompt', sans-serif; font-weight: 800; color: var(--text-main); line-height: 1.2;
-    }
-    .metric-desc { font-size: 0.78rem; color: var(--text-muted); }
-
-    /* Work conservation banner */
-    .work-conservation-card {
-      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
-      border: 2px solid #a7f3d0; border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1.25rem;
-    }
-    .work-icon { font-size: 2.2rem; color: #059669; }
-    .work-text h4 { color: #065f46; font-size: 1.1rem; margin-bottom: 0.25rem; }
-    .work-text p { color: #047857; font-size: 0.95rem; }
-
-    /* Knowledge Box */
-    .knowledge-box {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.5rem; margin-bottom: 1.5rem;
-    }
-    .knowledge-title {
-      font-size: 1.25rem; color: #1e3a8a; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;
-    }
-    .knowledge-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;
-    }
-    .knowledge-item {
-      background: #f8fafc; border-radius: var(--radius-md); padding: 1rem; border-left: 4px solid var(--primary);
-    }
-    .knowledge-item h5 { font-size: 1rem; color: var(--text-main); margin-bottom: 0.35rem; }
-    .knowledge-item p { font-size: 0.9rem; color: #475569; }
-
-    /* Predict Mode Box */
-    .predict-box {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.75rem; box-shadow: var(--shadow-sm);
-    }
-    .predict-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
-    .predict-header .predict-icon { font-size: 2rem; }
-    .predict-scenario-card {
-      background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: var(--radius-md);
-      padding: 1.25rem; margin-bottom: 1.25rem;
-    }
-    .predict-options-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
-    .predict-option-btn {
-      min-height: 50px; padding: 0.75rem 1.25rem; background: #ffffff;
-      border: 2px solid var(--border); border-radius: var(--radius-md);
-      font-family: 'Noto Sans Thai', sans-serif; font-size: 1rem; font-weight: 500;
-      color: var(--text-main); cursor: pointer; text-align: left;
-      display: flex; align-items: center; gap: 0.75rem; transition: all 0.2s;
-    }
-    .predict-option-btn:hover { border-color: var(--primary); background: #f8faff; }
-    .predict-option-btn.selected {
-      border-color: var(--primary); background: var(--primary-light); color: var(--primary-dark); font-weight: 700;
-    }
-    .predict-option-btn .opt-badge {
-      min-width: 32px; min-height: 32px; border-radius: 50%; background: #e2e8f0;
-      display: flex; align-items: center; justify-content: center; font-weight: 700;
-    }
-    .predict-option-btn.selected .opt-badge { background: var(--primary); color: white; }
-
-    .btn-run-prediction {
-      min-height: 48px; padding: 0.6rem 1.75rem; background: var(--primary);
-      color: white; border: none; border-radius: var(--radius-md);
-      font-family: 'Prompt', sans-serif; font-size: 1.05rem; font-weight: 700;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s;
-    }
-    .btn-run-prediction:disabled { background: #cbd5e1; cursor: not-allowed; }
-    .predict-result-box {
-      margin-top: 1.5rem; padding: 1.25rem; border-radius: var(--radius-md); display: none; animation: fadeIn 0.3s ease;
-    }
-    .predict-result-box.correct { background: #d1fae5; border: 2px solid #34d399; color: #065f46; }
-    .predict-result-box.incorrect { background: #fee2e2; border: 2px solid #f87171; color: #991b1b; }
-
-    /* Missions Mode */
-    .missions-container { display: flex; flex-direction: column; gap: 1.25rem; }
     .mission-card {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.5rem; box-shadow: var(--shadow-sm); position: relative; transition: all 0.2s;
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;
+      display: flex; flex-direction: column; justify-content: space-between;
+      gap: 1rem; box-shadow: var(--shadow-sm); transition: all 0.2s;
     }
-    .mission-card.completed { border-color: #34d399; background: linear-gradient(to right, #ffffff, #f0fdf4); }
-    .mission-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
-    .mission-num-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem; background: #f1f5f9;
-      padding: 0.3rem 0.75rem; border-radius: var(--radius-full);
-      font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 0.85rem; color: #475569;
+    .mission-card.completed {
+      border-color: #34d399; background: #f0fdf4;
     }
-    .mission-card.completed .mission-num-badge { background: #d1fae5; color: #065f46; }
-    .mission-star-award { font-size: 1.25rem; color: #cbd5e1; }
-    .mission-card.completed .mission-star-award { color: var(--accent); filter: drop-shadow(0 2px 4px rgba(245,158,11,0.4)); }
-    .mission-title { font-size: 1.25rem; color: var(--text-main); margin-bottom: 0.4rem; }
-    .mission-desc { color: #475569; font-size: 0.98rem; margin-bottom: 1.25rem; }
-    .mission-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; }
-    .btn-apply-mission {
-      min-height: 44px; padding: 0.4rem 1.25rem; background: var(--primary);
-      color: white; border: none; border-radius: var(--radius-md); font-family: 'Prompt', sans-serif;
-      font-weight: 600; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+    .mission-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .mission-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: #eff6ff; color: var(--primary); font-family: 'Prompt', sans-serif;
+      font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
     }
-    .btn-check-mission {
-      min-height: 44px; padding: 0.4rem 1.25rem; background: var(--success);
-      color: white; border: none; border-radius: var(--radius-md); font-family: 'Prompt', sans-serif;
-      font-weight: 700; font-size: 0.95rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem;
+    .mission-card.completed .mission-badge {
+      background: #d1fae5; color: #065f46;
     }
-    .mission-feedback { margin-top: 0.75rem; font-size: 0.95rem; font-weight: 600; display: none; }
+    .mission-star-icon { font-size: 1.5rem; color: #cbd5e1; }
+    .mission-card.completed .mission-star-icon { color: var(--accent); }
+    .mission-title { font-size: 1.15rem; color: var(--text-main); margin-bottom: 0.35rem; }
+    .mission-desc { font-size: 0.92rem; color: var(--text-muted); line-height: 1.5; }
+    .mission-verify-feedback {
+      font-size: 0.88rem; padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm); font-weight: 500; display: none;
+    }
 
-    /* Quiz Mode */
+    /* QUIZ STYLES */
     .quiz-container {
-      background: #ffffff; border: 2px solid var(--border); border-radius: var(--radius-lg);
-      padding: 1.75rem; box-shadow: var(--shadow-sm);
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.75rem;
+      box-shadow: var(--shadow-sm); max-width: 860px; margin: 0 auto;
     }
-    .quiz-question-item { padding-bottom: 1.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+    .quiz-question-item {
+      padding-bottom: 1.5rem; margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
     .quiz-question-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-    .quiz-q-title { font-size: 1.15rem; color: var(--text-main); margin-bottom: 1rem; display: flex; gap: 0.5rem; }
-    .quiz-choices { display: flex; flex-direction: column; gap: 0.6rem; }
+    .quiz-q-title { font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.85rem; display: flex; gap: 0.5rem; }
+    .quiz-choices { display: flex; flex-direction: column; gap: 0.5rem; }
     .quiz-choice-label {
-      display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
-      border: 1.5px solid var(--border); border-radius: var(--radius-md); cursor: pointer;
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius-md); cursor: pointer;
       transition: all 0.2s; font-size: 0.95rem;
     }
     .quiz-choice-label:hover { background: #f8fafc; border-color: #cbd5e1; }
     .quiz-choice-label.correct-answer { background: #d1fae5; border-color: #34d399; color: #065f46; font-weight: 600; }
     .quiz-choice-label.wrong-answer { background: #fee2e2; border-color: #f87171; color: #991b1b; }
-    .quiz-choice-label input[type="radio"] { width: 20px; height: 20px; accent-color: var(--primary); }
+    .quiz-choice-label input[type="radio"] { width: 18px; height: 18px; accent-color: var(--primary); }
     .quiz-explanation {
-      margin-top: 0.6rem; padding: 0.75rem 1rem; background: #f8fafc;
-      border-left: 3px solid var(--primary); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      font-size: 0.9rem; color: #334155; display: none;
+      margin-top: 0.75rem; background: #eff6ff; border-left: 4px solid var(--primary);
+      padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.9rem;
+      color: #1e3a8a; display: none; line-height: 1.5;
     }
     .quiz-footer {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-top: 1.5rem; padding-top: 1.25rem; border-top: 2px solid var(--border); flex-wrap: wrap; gap: 1rem;
+      margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
     }
-    .quiz-score-badge { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--primary-dark); }
+    .quiz-score-badge { font-family: 'Prompt', sans-serif; font-weight: 700; font-size: 1.15rem; color: var(--primary-dark); }
 
-    /* Toast */
+    /* PREDICTION SCENARIO BOX */
+    .predict-box {
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-lg); padding: 1.5rem 1.75rem;
+      max-width: 820px; margin: 0 auto; box-shadow: var(--shadow-sm);
+    }
+    .predict-header {
+      display: flex; align-items: center; gap: 0.75rem;
+      margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border);
+    }
+    .predict-options-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0; }
+    .predict-btn-choice {
+      padding: 0.9rem 1.25rem; border: 2px solid var(--border);
+      border-radius: var(--radius-md); background: #ffffff;
+      text-align: left; font-size: 1rem; font-family: 'Noto Sans Thai', sans-serif;
+      cursor: pointer; transition: all 0.2s; display: flex; gap: 0.75rem; align-items: center;
+    }
+    .predict-btn-choice:hover { border-color: var(--primary); background: #f8fafc; }
+    .predict-feedback-card {
+      margin-top: 1.25rem; padding: 1rem 1.25rem; border-radius: var(--radius-md);
+      display: none; animation: fadeIn 0.2s ease;
+    }
+    .predict-feedback-card.correct { background: #d1fae5; border: 1.5px solid #34d399; color: #065f46; }
+    .predict-feedback-card.wrong { background: #fee2e2; border: 1.5px solid #f87171; color: #991b1b; }
+
+    /* TOAST NOTIFICATION */
     .celebration-toast {
-      position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: white;
-      padding: 1rem 1.5rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
-      display: flex; align-items: center; gap: 0.75rem; z-index: 2000;
-      transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: fixed; bottom: 24px; right: 24px;
+      background: #1e293b; color: white;
+      padding: 1rem 1.5rem; border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg); display: flex; align-items: center;
+      gap: 1rem; z-index: 9999; transform: translateY(120px);
+      opacity: 0; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
     .celebration-toast.show { transform: translateY(0); opacity: 1; }
 
-    /* Segment Buttons (Selector pills) */
-    .pill-selector { display: flex; gap: 0.4rem; background: #f1f5f9; padding: 0.3rem; border-radius: var(--radius-md); }
-    .pill-btn {
-      flex: 1; min-height: 40px; border: none; background: transparent; border-radius: var(--radius-sm);
-      font-family: 'Prompt', sans-serif; font-size: 0.9rem; font-weight: 600; color: #64748b; cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center; gap: 0.3rem; transition: all 0.2s;
+    /* MODALS */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 2000; display: none;
+      align-items: center; justify-content: center;
+      padding: 1rem;
     }
-    .pill-btn.active { background: #ffffff; color: var(--primary); box-shadow: var(--shadow-sm); }
+    .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+    .modal-window {
+      background: #ffffff; border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg); max-width: 900px; width: 100%;
+      max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;
+    }
+    .modal-header {
+      padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: #ffffff; z-index: 10;
+    }
+    .modal-body { padding: 1.5rem; flex: 1; }
 
-    @media (max-width: 768px) {
-      body { font-size: 15px; }
-      .header-container { padding: 0.5rem 1rem; }
-      .logo-text span { display: none; }
-      .hero-content { flex-direction: column; text-align: center; }
-      .hero-text h2 { font-size: 1.4rem; }
-      .svg-container { height: 320px; }
-      .room-header { flex-direction: column; align-items: flex-start; }
-      .room-tabs { width: 100%; overflow-x: auto; }
-      .tab-btn { flex: 1; justify-content: center; white-space: nowrap; }
+    /* Student grid in selection modal */
+    .student-filter-bar {
+      display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;
     }
+    .student-filter-btn {
+      padding: 0.4rem 0.9rem; border: 1px solid var(--border);
+      border-radius: var(--radius-full); background: #f8fafc;
+      font-family: 'Prompt', sans-serif; font-size: 0.88rem; cursor: pointer;
+    }
+    .student-filter-btn.active {
+      background: var(--primary); color: white; border-color: var(--primary);
+    }
+    .student-search-input {
+      flex: 1; min-width: 220px; padding: 0.45rem 0.85rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius-md);
+      font-size: 0.9rem; outline: none;
+    }
+    .student-search-input:focus { border-color: var(--primary); }
+
+    .students-card-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.9rem; max-height: 480px; overflow-y: auto; padding-right: 0.25rem;
+    }
+    .student-select-card {
+      background: #ffffff; border: 2px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.85rem 1rem;
+      cursor: pointer; transition: all 0.2s ease; display: flex;
+      flex-direction: column; gap: 0.35rem; position: relative;
+    }
+    .student-select-card:hover {
+      border-color: var(--primary); transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .student-select-card.active-student {
+      border-color: var(--primary); background: #eff6ff;
+    }
+    .scard-top { display: flex; justify-content: space-between; align-items: center; }
+    .scard-name { font-weight: 700; font-size: 0.95rem; color: var(--text-main); }
+    .scard-meta { font-size: 0.8rem; color: var(--text-muted); }
+    .scard-score-pill {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      font-size: 0.8rem; font-weight: 700; color: var(--accent-dark);
+      background: #fffbeb; padding: 0.15rem 0.45rem; border-radius: var(--radius-sm);
+    }
+
+    /* Teacher Gradebook Table */
+    .teacher-stats-bar {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem; margin-bottom: 1.25rem;
+    }
+    .stat-tile {
+      background: #f8fafc; border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 0.85rem 1rem;
+    }
+    .stat-tile-title { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .stat-tile-val { font-family: 'Prompt', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--primary-dark); }
+
+    .grade-table-wrapper {
+      overflow-x: auto; border: 1px solid var(--border);
+      border-radius: var(--radius-md); max-height: 440px;
+    }
+    .grade-table {
+      width: 100%; border-collapse: collapse; font-size: 0.88rem;
+    }
+    .grade-table th, .grade-table td {
+      padding: 0.65rem 0.85rem; text-align: left;
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    .grade-table th {
+      background: #f1f5f9; font-family: 'Prompt', sans-serif;
+      font-weight: 700; color: var(--text-main); position: sticky; top: 0; z-index: 5;
+    }
+    .grade-table tr:hover td { background: #f8fafc; }
+    .badge-grade {
+      display: inline-block; padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm); font-size: 0.78rem; font-weight: 600;
+    }
+    .badge-grade.excellent { background: #d1fae5; color: #065f46; }
+    .badge-grade.good { background: #dbeafe; color: #1e40af; }
+    .badge-grade.pass { background: #fef3c7; color: #92400e; }
+    .badge-grade.needs-work { background: #fee2e2; color: #991b1b; }
+    
   </style>
 </head>
 <body>
 
-  <!-- TOP HEADER -->
   <header>
     <div class="header-container">
       <div class="logo-area" onclick="App.navigateHome()" title="กลับหน้าแรก">
         <div class="logo-icon">⚙️</div>
         <div class="logo-text">
-          <h1>STEM เครื่องกลอย่างง่าย</h1>
-          <span>ห้องเรียนวิทยาศาสตร์ ม.1</span>
+          <h1>STEM เครื่องกลอย่างง่าย ม.1</h1>
+          <span>สื่อการสอนและห้องปฏิบัติการจำลองเสมือนจริง</span>
         </div>
       </div>
 
       <div class="header-actions">
+        <!-- Database Connection Badge -->
+        <div id="header-db-status" class="db-status-pill" title="สถานะการเชื่อมต่อฐานข้อมูล SQLite">
+          <span id="db-indicator-dot">🟢</span>
+          <span id="db-indicator-text">SQLite DB</span>
+        </div>
+
+        <!-- Student Profile Pill (Click to Switch/Select Student) -->
+        <div id="header-student-pill" class="student-profile-pill unselected" onclick="App.openStudentModal()" title="คลิกเพื่อเลือกหรือสลับชื่อนักเรียน">
+          <span id="header-student-avatar" style="font-size: 1.2rem;">👤</span>
+          <div>
+            <div id="header-student-name" style="font-family: 'Prompt'; font-weight: 700; line-height: 1.1;">คลิกเลือกนักเรียน</div>
+            <div id="header-student-class" style="font-size: 0.72rem; color: var(--text-muted);">เข้าสู่ระบบบันทึกคะแนน</div>
+          </div>
+        </div>
+
+        <!-- Teacher Dashboard Button -->
+        <button class="btn-teacher-dashboard" onclick="App.openTeacherDashboard()" title="เปิดสมุดคะแนนและแดชบอร์ดคุณครู">
+          📊 <span>สมุดคะแนน</span>
+        </button>
+
+        <!-- Back to Home Button -->
         <button id="btn-back-home" class="btn-nav-home" onclick="App.navigateHome()" style="display: none;">
           🏠 <span>หน้าแรก</span>
         </button>
 
-        <div class="star-badge" title="ดาวความสำเร็จสะสม">
+        <!-- Global Star Counter -->
+        <div class="star-badge" title="ดาวความสำเร็จสะสมรายบุคคล">
           <span class="star-icon">⭐</span>
           <span id="global-star-count">0</span> / 20
         </div>
 
+        <!-- Sound Toggle -->
         <button id="btn-sound-toggle" class="btn-icon" onclick="Sound.toggle()" title="เปิด/ปิดเสียงเอฟเฟกต์">
           🔊
         </button>
@@ -543,18 +744,40 @@
          VIEW 1: HOME VIEW
          ======================================================================== -->
     <section id="view-home" class="view-section active">
-      
+
+      <!-- Active Student Welcome Banner -->
+      <div id="active-student-bar" class="active-student-bar">
+        <div class="student-welcome-info">
+          <div id="welcome-student-avatar" class="student-avatar-large">👦</div>
+          <div>
+            <div style="font-size: 0.82rem; color: #1e40af; font-weight: 600;">👋 บัญชีผู้เรียนปัจจุบัน:</div>
+            <h3 id="welcome-student-name" style="font-size: 1.15rem; color: var(--text-main); line-height: 1.2;">ด.ช. กิตติศักดิ์ วงศ์สุวรรณ (ม.1/1 เลขที่ 1)</h3>
+            <div id="welcome-student-meta" style="font-size: 0.85rem; color: var(--text-muted);">
+              รหัสนักเรียน: <strong>670101</strong> | ดาวสะสม: <strong id="welcome-stars">0</strong>/20 ดาว | คะแนนควิซรวม: <strong id="welcome-quiz">0</strong>/20
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn-quick" onclick="App.openStudentModal()" style="background: #ffffff; border-color: #93c5fd; color: #1e40af;">
+            🔄 สลับนักเรียน
+          </button>
+          <button class="btn-quick" onclick="App.openStudentProfileModal()" style="background: #3b82f6; border-color: #2563eb; color: #ffffff;">
+            📜 ดูสมุดพกคะแนน
+          </button>
+        </div>
+      </div>
+
       <div class="hero-banner">
         <div class="hero-content">
-          <div class="mascot-avatar" title="น้องน็อต หุ่นยนต์นักประดิษฐ์">🤖</div>
+          <div class="hero-tag">🌟 บทเรียนวิทยาศาสตร์ ม.1 เรื่องงานและพลังงาน</div>
           <div class="hero-text">
-            <h2>สวัสดีนักประดิษฐ์ ม.1! มาไขความลับเครื่องกลกัน</h2>
+            <h2>สวัสดีนักประดิษฐ์ ม.1! มาไขความลับ 5 เครื่องกลอย่างง่าย</h2>
             <p>
               "ลองเล่น ปรับค่า แล้วสังเกตผล" เครื่องกลแต่ละชนิดช่วยทุ่นแรงให้เราได้อย่างไร? 
-              จำกฎเหล็กไว้เสมอ: <strong>"ได้แรงเพิ่ม แลกกับระยะทางที่ต้องใช้เพิ่ม" (งานเท่าเดิมเสมอ!)</strong>
+              จำกฎเหล็กไว้เสมอ: <strong>"ได้แรงเพิ่ม แลกกับระยะทางที่ต้องใช้เพิ่ม" (งานเท่าเดิมเสมอ W = F × s)</strong>
             </p>
             <div class="hero-rule-pill">
-              💡 กฎการอนุรักษ์พลังงาน: งานที่ได้ = แรงที่ออก × ระยะทางที่เคลื่อนที่ (W = F × s)
+              💡 บันทึกผลคะแนนรายคนอัตโนมัติลงฐานข้อมูล SQLite | ทำภารกิจและควิซเพื่อเก็บดาวให้ครบ 20 ดวง!
             </div>
           </div>
         </div>
@@ -574,7 +797,7 @@
           <button class="btn-enter-room" onclick="App.enterRoom('lever')">🚀 เข้าทดลองเล่นคาน</button>
         </div>
 
-        <!-- CARD 2: รอก (เปิดใช้งานแล้ว!) -->
+        <!-- CARD 2: รอก -->
         <div class="machine-card active-card">
           <div class="card-top">
             <div class="card-icon-box" style="background: #fef3c7; color: #d97706;">🪢</div>
@@ -586,7 +809,7 @@
           <button class="btn-enter-room" onclick="App.enterRoom('pulley')">🚀 เข้าทดลองเล่นรอก</button>
         </div>
 
-        <!-- CARD 3: ทางลาด (เปิดใช้งานแล้ว!) -->
+        <!-- CARD 3: ทางลาด -->
         <div class="machine-card active-card">
           <div class="card-top">
             <div class="card-icon-box" style="background: #f3e8ff; color: #7c3aed;">📐</div>
@@ -598,40 +821,45 @@
           <button class="btn-enter-room" onclick="App.enterRoom('incline')">🚀 เข้าทดลองเล่นทางลาด</button>
         </div>
 
-        <!-- CARD 4: เฟือง -->
-        <div class="machine-card locked">
+        <!-- CARD 4: เฟือง (เปิดใช้งานสมบูรณ์!) -->
+        <div class="machine-card active-card">
           <div class="card-top">
             <div class="card-icon-box" style="background: #ecfdf5; color: #059669;">⚙️</div>
-            <div class="card-stars-earned">⭐ 0 / 4</div>
+            <div class="card-stars-earned">⭐ <span id="card-stars-gears">0</span> / 4</div>
           </div>
           <h3 class="card-title">4. เฟือง (Gears)</h3>
           <p class="card-subtitle">ฟันเฟืองส่งต่อแรงหมุน อัตราทดของจำนวนฟัน อยากได้ความเร็วหรืออยากได้แรง?</p>
-          <div class="card-formula-tag">อัตราทด = ฟันตาม ÷ ฟันขับ</div>
-          <div class="badge-locked">⏳ กำลังเตรียมการในขั้นที่ 3</div>
+          <div class="card-formula-tag">อัตราทด = ฟันตาม ÷ ฟันขับ (i = Z2 ÷ Z1)</div>
+          <button class="btn-enter-room" onclick="App.enterRoom('gears')">🚀 เข้าทดลองเล่นเฟือง</button>
         </div>
 
-        <!-- CARD 5: แขนกล -->
-        <div class="machine-card locked">
+        <!-- CARD 5: แขนกล (เปิดใช้งานสมบูรณ์!) -->
+        <div class="machine-card active-card">
           <div class="card-top">
             <div class="card-icon-box" style="background: #fdf2f8; color: #db2777;">🦾</div>
-            <div class="card-stars-earned">⭐ 0 / 4</div>
+            <div class="card-stars-earned">⭐ <span id="card-stars-arm">0</span> / 4</div>
           </div>
           <h3 class="card-title">5. แขนกล (Robotic Arm)</h3>
           <p class="card-subtitle">รวมร่างคานหลายข้อต่อ บังคับมือจับคีบกล่องขึ้นชั้นวาง คานอันดับ 3 ที่ว่องไว</p>
-          <div class="card-formula-tag">ระบบข้อต่อคานหลายท่อน</div>
-          <div class="badge-locked">⏳ กำลังเตรียมการในขั้นที่ 3</div>
+          <div class="card-formula-tag">เครื่องกลร่วม & คานอันดับ 3 (M.A. < 1)</div>
+          <button class="btn-enter-room" onclick="App.enterRoom('arm')">🚀 เข้าทดลองเล่นแขนกล</button>
         </div>
 
       </div>
 
       <div class="summary-card">
         <div class="summary-info">
-          <h3>🏆 ความก้าวหน้ารวมของฉัน: <span id="home-total-stars-text">0</span> ดาว</h3>
-          <p>ผ่านภารกิจและทำควิซเพื่อสะสมดาวให้ครบ เป็นสุดยอดนักประดิษฐ์ ม.1</p>
+          <h3>🏆 ความก้าวหน้ารวมของผู้เรียน: <span id="home-total-stars-text">0</span> / 20 ดาว</h3>
+          <p>ผ่านภารกิจและทำควิซครบทั้ง 5 ห้องเพื่อรับเกียรติบัตรสุดยอดนักประดิษฐ์ ม.1 ข้อมูลทั้งหมดบันทึกในฐานข้อมูล</p>
         </div>
-        <button class="btn-quick" onclick="App.resetProgress()" title="เริ่มบันทึกคะแนนใหม่ตั้งแต่ต้น">
-          🔄 ล้างข้อมูลแล้วเริ่มเล่นใหม่
-        </button>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+          <button class="btn-teacher-dashboard" onclick="App.openTeacherDashboard()">
+            📊 ตรวจสอบสมุดคะแนนทั้งห้อง
+          </button>
+          <button class="btn-quick" onclick="App.resetCurrentStudentProgress()" title="เริ่มบันทึกคะแนนใหม่สำหรับนักเรียนคนนี้">
+            🔄 รีเซ็ตคะแนนนักเรียนคนนี้
+          </button>
+        </div>
       </div>
 
     </section>
@@ -1534,6 +1762,628 @@
       </div>
     </section>
 
+    <!-- ========================================================================
+         VIEW 5: ROOM 4 - เฟือง (GEARS ROOM)
+         ======================================================================== -->
+    <section id="view-gears" class="view-section">
+      <div class="room-header">
+        <div class="room-title-area">
+          <div class="room-icon-badge" style="background: #ecfdf5; color: #059669;">⚙️</div>
+          <div>
+            <h2>ห้องปฏิบัติการที่ 4: เฟือง (Gears Lab)</h2>
+            <p>ศึกษาการส่งถ่ายกำลัง การทดรอบ ความเร็วเชิงมุม และแรงบิดของฟันเฟือง</p>
+          </div>
+        </div>
+
+        <div class="room-tabs-nav">
+          <button class="tab-btn active" onclick="GearsLab.switchTab('explore')">🎮 <span>สำรวจอิสระ</span></button>
+          <button class="tab-btn" onclick="GearsLab.switchTab('types')">📚 <span>อัตราทด & ประเภทเฟือง</span></button>
+          <button class="tab-btn" onclick="GearsLab.switchTab('predict')">🔮 <span>ลองทายก่อน</span></button>
+          <button class="tab-btn" onclick="GearsLab.switchTab('missions')">🎯 <span>ภารกิจ (3)</span></button>
+          <button class="tab-btn" onclick="GearsLab.switchTab('quiz')">📝 <span>ควิซท้ายห้อง</span></button>
+        </div>
+      </div>
+
+      <!-- TAB 1: EXPLORE -->
+      <div id="gears-tab-explore" class="tab-content-panel active">
+        <div class="lab-workbench">
+          <div class="sim-stage-card">
+            <div class="sim-stage-header">
+              <span class="stage-title">แท่นทดสอบระบบส่งกำลังด้วยฟันเฟือง</span>
+              <div id="gears-status-badge" class="balance-status-badge balanced">
+                <span>⚙️</span> <span id="gears-status-text">อัตราทด 1.0 : ส่งต่อแรงหมุนปกติ</span>
+              </div>
+            </div>
+
+            <div class="svg-container" id="gears-svg-container">
+              <svg class="sim-svg" id="gears-svg" viewBox="0 0 760 380">
+                <defs>
+                  <filter id="gear-shadow" x="-10%" y="-10%" width="130%" height="130%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.15" />
+                  </filter>
+                  <linearGradient id="gearA-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#3b82f6" />
+                    <stop offset="100%" stop-color="#1d4ed8" />
+                  </linearGradient>
+                  <linearGradient id="gearB-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#10b981" />
+                    <stop offset="100%" stop-color="#047857" />
+                  </linearGradient>
+                  <linearGradient id="gearC-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f59e0b" />
+                    <stop offset="100%" stop-color="#d97706" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Grid Background -->
+                <g opacity="0.08">
+                  <line x1="0" y1="190" x2="760" y2="190" stroke="#000" stroke-dasharray="6,6" />
+                  <line x1="380" y1="0" x2="380" y2="380" stroke="#000" stroke-dasharray="6,6" />
+                </g>
+
+                <!-- Connection shafts / base plate -->
+                <rect x="100" y="320" width="560" height="24" rx="6" fill="#cbd5e1" stroke="#94a3b8" />
+                <circle cx="260" cy="332" r="6" fill="#64748b" />
+                <circle cx="500" cy="332" r="6" fill="#64748b" />
+
+                <!-- Dynamic Gear Groups (Rendered by JS) -->
+                <g id="gear-idler-group" style="display: none;"></g>
+                <g id="gear-driver-group"></g>
+                <g id="gear-driven-group"></g>
+
+                <!-- Rotation Direction Arrows -->
+                <g id="gear-arrows-layer"></g>
+
+                <!-- Labels -->
+                <text x="240" y="365" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="14" fill="#1d4ed8">เฟืองขับ A (Driver)</text>
+                <text x="520" y="365" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="14" fill="#047857">เฟืองตาม B (Driven)</text>
+              </svg>
+            </div>
+
+            <!-- Telemetry Row -->
+            <div class="telemetry-row">
+              <div class="tele-cell">
+                <div class="tele-label">อัตราทด (Ratio i)</div>
+                <div class="tele-val primary" id="gval-ratio">1.00</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">ความเร็วเฟืองตาม B</div>
+                <div class="tele-val success" id="gval-rpm-b">30 RPM</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">ทิศทางการหมุน</div>
+                <div class="tele-val purple" id="gval-direction">ทวนเข็ม ↺</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">ผลลัพธ์เชิงกล</div>
+                <div class="tele-val accent" id="gval-effect">ความเร็วเท่าเดิม</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="controls-panel">
+            <div class="panel-block-title">
+              <span>🎮 แผงตั้งค่าเฟือง</span>
+              <button class="btn-quick" onclick="GearsLab.togglePlay()" id="btn-gears-play" style="padding: 0.2rem 0.6rem; font-size: 0.8rem;">⏸️ หยุดหมุน</button>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-label-row">
+                <span>จำนวนฟันเฟืองขับ A (น้ำเงิน)</span>
+                <span id="gval-teeth-a" class="slider-val-tag">24 ฟัน</span>
+              </div>
+              <input type="range" id="slider-teeth-a" min="12" max="36" step="12" value="24" oninput="GearsLab.onControlChange()">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                <span>12 ฟัน (เล็ก)</span><span>24 ฟัน (กลาง)</span><span>36 ฟัน (ใหญ่)</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-label-row">
+                <span>จำนวนฟันเฟืองตาม B (เขียว)</span>
+                <span id="gval-teeth-b" class="slider-val-tag">24 ฟัน</span>
+              </div>
+              <input type="range" id="slider-teeth-b" min="12" max="36" step="12" value="24" oninput="GearsLab.onControlChange()">
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                <span>12 ฟัน (เล็ก)</span><span>24 ฟัน (กลาง)</span><span>36 ฟัน (ใหญ่)</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-label-row">
+                <span>ความเร็วรอบต้นกำลัง A</span>
+                <span id="gval-rpm-a" class="slider-val-tag">30 RPM</span>
+              </div>
+              <input type="range" id="slider-rpm-a" min="10" max="90" step="10" value="30" oninput="GearsLab.onControlChange()">
+            </div>
+
+            <div class="control-group" style="padding-top: 0.5rem; border-top: 1px dashed var(--border);">
+              <label style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;">
+                <input type="checkbox" id="check-idler-gear" onchange="GearsLab.toggleIdler()" style="width: 18px; height: 18px; accent-color: var(--accent);">
+                <span style="font-size: 0.92rem; font-weight: 600; color: var(--text-main);">แทรก "เฟืองสะพาน" (Idler C)</span>
+              </label>
+              <div style="font-size: 0.78rem; color: var(--text-muted); padding-left: 1.6rem;">
+                ใช้คั่นระหว่าง A และ B เพื่อกลับทิศการหมุนให้ไปทางเดียวกัน
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.75rem; font-size: 0.85rem;">
+              <div style="font-weight: 700; color: var(--primary-dark); margin-bottom: 0.25rem;">💡 สูตรคำนวณอัตราทด (Gear Ratio):</div>
+              <div><strong>i = จำนวนฟันตาม ÷ จำนวนฟันขับ</strong> = Z<sub>B</sub> ÷ Z<sub>A</sub></div>
+              <div style="margin-top: 0.35rem; color: var(--text-muted);">
+                ความเร็วรอบ: N<sub>B</sub> = N<sub>A</sub> ÷ i | แรงบิด: T<sub>B</sub> = T<sub>A</sub> × i
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: TYPES & THEORY -->
+      <div id="gears-tab-types" class="tab-content-panel">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚙️ ⚙️</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">1. เฟืองทดเพิ่มแรงบิด (Speed Reducer)</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              เมื่อ <strong>เฟืองขับขนาดเล็ก</strong> หมุนขับ <strong>เฟืองตามขนาดใหญ่</strong> (Z<sub>B</sub> > Z<sub>A</sub>)<br>
+              - อัตราทด i > 1 (เช่น 2:1 หรือ 3:1)<br>
+              - <strong>ผลลัพธ์:</strong> ความเร็วรอบหมุนช้าลง แต่ <strong>แรงบิดเพิ่มขึ้นทวีคูณ</strong><br>
+              - <strong>ตัวอย่าง:</strong> เกียร์ 1 ของรถยนต์ หรือเกียร์จักรยานตอนปั่นขึ้นสะพานชัน
+            </p>
+          </div>
+
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔄 ⚡</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">2. เฟืองทดเพิ่มความเร็ว (Speed Multiplier)</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              เมื่อ <strong>เฟืองขับขนาดใหญ่</strong> หมุนขับ <strong>เฟืองตามขนาดเล็ก</strong> (Z<sub>B</sub> < Z<sub>A</sub>)<br>
+              - อัตราทด i < 1 (เช่น 1:2 หรือ 1:3)<br>
+              - <strong>ผลลัพธ์:</strong> เฟืองตามหมุนเร็วกว่าเดิมมาก แต่ต้อง <strong>ออกแรงหมุนมากขึ้น</strong><br>
+              - <strong>ตัวอย่าง:</strong> เกียร์สูงของจักรยานเสือภูเขาตอนปั่นทำความเร็วบนทางราบ
+            </p>
+          </div>
+
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔁 🎯</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">3. เฟืองสะพาน (Idler Gear)</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              เฟืองตัวกลางที่ใส่คั่นไว้ระหว่างเฟืองขับและเฟืองตาม<br>
+              - <strong>ไม่ส่งผลต่ออัตราทดรวม:</strong> (อัตราทดยังคงเท่ากับ Z<sub>ตาม</sub> ÷ Z<sub>ขับ</sub> เหมือนเดิม)<br>
+              - <strong>หน้าที่หลัก:</strong> เปลี่ยนทิศทางการหมุน ให้เฟืองขับและเฟืองตาม <strong>หมุนไปในทิศทางเดียวกัน</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PREDICT -->
+      <div id="gears-tab-predict" class="tab-content-panel">
+        <div class="predict-box">
+          <div class="predict-header">
+            <span style="font-size: 1.8rem;">🔮</span>
+            <div>
+              <h3 id="gears-predict-title" style="font-size: 1.15rem; color: var(--text-main);">สถานการณ์ที่ 1: ปั่นจักรยานขึ้นภูเขาสูงชัน</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">คิดวิเคราะห์แล้วเลือกคำตอบที่ถูกต้องที่สุดก่อนสังเกตผลจำลอง</p>
+            </div>
+          </div>
+          <p id="gears-predict-desc" style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 1rem;">
+            นักเรียนต้องการปั่นจักรยานขึ้นเนินสูงชันมาก เพื่อให้ <strong>"ผ่อนแรงขาได้มากที่สุด"</strong> ควรเลือกขนาดจานหน้า (เฟืองขับ) และเฟืองหลัง (เฟืองตาม) อย่างไร?
+          </p>
+          <div class="predict-options-list" id="gears-predict-options"></div>
+          <div id="gears-predict-feedback" class="predict-feedback-card"></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: MISSIONS -->
+      <div id="gears-tab-missions" class="tab-content-panel">
+        <div class="missions-grid">
+          <!-- Mission 1 -->
+          <div class="mission-card" id="gmission-card-1">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 1</span>
+                <span class="mission-star-icon" id="gmstar-1">⭐</span>
+              </div>
+              <h3 class="mission-title">ไต่เขาเพิ่มแรงบิด (Ratio ≥ 2.0)</h3>
+              <p class="mission-desc">ปรับอัตราทดให้เฟืองตามหมุนช้าลงแต่เกิดแรงบิดเพิ่มขึ้นเป็นอย่างน้อย 2 เท่าของเฟืองขับ</p>
+            </div>
+            <div id="gmfb-1" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="GearsLab.verifyMission(1)">🎯 ตรวจสอบภารกิจที่ 1</button>
+          </div>
+
+          <!-- Mission 2 -->
+          <div class="mission-card" id="gmission-card-2">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 2</span>
+                <span class="mission-star-icon" id="gmstar-2">⭐</span>
+              </div>
+              <h3 class="mission-title">ซิ่งความเร็วสูง (Ratio ≤ 0.5)</h3>
+              <p class="mission-desc">ปรับเฟืองเพื่อให้เฟืองตามหมุนเร็วกว่าเฟืองขับอย่างน้อย 2 เท่า (ความเร็วรอบพุ่งสูง!)</p>
+            </div>
+            <div id="gmfb-2" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="GearsLab.verifyMission(2)">🎯 ตรวจสอบภารกิจที่ 2</button>
+          </div>
+
+          <!-- Mission 3 -->
+          <div class="mission-card" id="gmission-card-3">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 3</span>
+                <span class="mission-star-icon" id="gmstar-3">⭐</span>
+              </div>
+              <h3 class="mission-title">หมุนไปในทิศทางเดียวกัน</h3>
+              <p class="mission-desc">เปิดใช้งานเฟืองสะพาน (Idler Gear) เพื่อส่งกำลังให้เฟืองตามหมุนตามเข็มนาฬิกาเหมือนกับเฟืองขับ</p>
+            </div>
+            <div id="gmfb-3" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="GearsLab.verifyMission(3)">🎯 ตรวจสอบภารกิจที่ 3</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: QUIZ -->
+      <div id="gears-tab-quiz" class="tab-content-panel">
+        <div class="quiz-container">
+          <form id="gears-quiz-form" onsubmit="event.preventDefault(); GearsLab.submitQuiz();">
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 1.</strong><span>เมื่อเฟือง 2 ตัวขบกันโดยตรง ทิศทางการหมุนของทั้งคู่จะเป็นอย่างไร?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="gq1" value="a" required><span>ก. หมุนไปในทิศทางตรงกันข้ามเสมอ (ตัวหนึ่งตามเข็ม อีกตัวหนึ่งทวนเข็ม)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq1" value="b"><span>ข. หมุนไปในทิศทางเดียวกันเสมอ</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq1" value="c"><span>ค. หมุนทิศใดก็ได้ขึ้นอยู่กับขนาดของฟัน</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-gq1">💡 <strong>เฉลย ก:</strong> ถูกต้อง! ฟันเฟืองที่ขบกันจะผลักกันในทิศตรงข้าม ทำให้ทิศการหมุนกลับด้านเสมอ</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 2.</strong><span>เฟืองขับ A มี 12 ฟัน ขับเฟืองตาม B มี 36 ฟัน หากเฟืองขับหมุนด้วยความเร็ว 60 RPM เฟืองตามจะหมุนกี่ RPM?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="gq2" value="a" required><span>ก. 180 RPM</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq2" value="b"><span>ข. 20 RPM (เพราะอัตราทด 36 ÷ 12 = 3 เท่า หมุนช้าลง 3 เท่า)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq2" value="c"><span>ค. 60 RPM เท่าเดิม</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-gq2">💡 <strong>เฉลย ข:</strong> ถูกต้อง! อัตราทด i = 36 ÷ 12 = 3 ความเร็วรอบจึงลดลงเหลือ 60 ÷ 3 = 20 RPM (แต่ได้แรงบิดเพิ่มขึ้น 3 เท่า!)</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 3.</strong><span>การใส่ "เฟืองสะพาน" (Idler Gear) คั่นตรงกลาง มีประโยชน์หลักคือข้อใด?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="gq3" value="a" required><span>ก. เปลี่ยนทิศการหมุนของเฟืองตามให้หมุนไปทางเดียวกับเฟืองขับ โดยไม่เปลี่ยนอัตราทดรวม</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq3" value="b"><span>ข. ช่วยเพิ่มอัตราทดให้แรงขึ้น 10 เท่า</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq3" value="c"><span>ค. ทำให้งานทั้งหมดกลายเป็นศูนย์</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-gq3">💡 <strong>เฉลย ก:</strong> ถูกต้อง! เฟืองสะพานทำหน้าที่เพียงสะพานส่งต่อแรงและกลับทิศทาง ไม่เปลี่ยนอัตราทดรวม</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 4.</strong><span>ในการปั่นจักรยานขึ้นภูเขาสูงชัน เราควรเลือกปรับเกียร์อย่างไรเพื่อให้ <strong>"เบาแรงขาที่สุด"</strong>?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="gq4" value="a" required><span>ก. จานหน้าเล็ก (เฟืองขับเล็ก) และ เฟืองหลังใหญ่ (เฟืองตามใหญ่) เพื่อเพิ่มแรงบิดสูงสุด</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq4" value="b"><span>ข. จานหน้าใหญ่ และ เฟืองหลังเล็ก</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="gq4" value="c"><span>ค. ใช้เกียร์ใดก็ได้เพราะน้ำหนักคนเท่าเดิม</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-gq4">💡 <strong>เฉลย ก:</strong> ถูกต้อง! จานหน้าเล็กขับเฟืองหลังใหญ่ อัตราทด i > 1 ช่วยผ่อนแรงขา แลกกับต้องปั่นซอยขาหลายรอบขึ้น (งานเท่าเดิม!)</div>
+            </div>
+
+            <div class="quiz-footer">
+              <div class="quiz-score-badge" id="gears-quiz-summary">กรุณาเลือกตอบทุกข้อแล้วกดส่งคำตอบ</div>
+              <button type="submit" class="btn-action-primary" style="padding: 0.75rem 1.75rem;">📝 ส่งคำตอบและบันทึกคะแนน</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         VIEW 6: ROOM 5 - แขนกล (ROBOTIC ARM ROOM)
+         ======================================================================== -->
+    <section id="view-arm" class="view-section">
+      <div class="room-header">
+        <div class="room-title-area">
+          <div class="room-icon-badge" style="background: #fdf2f8; color: #db2777;">🦾</div>
+          <div>
+            <h2>ห้องปฏิบัติการที่ 5: แขนกล (Robotic Arm Lab)</h2>
+            <p>ศึกษาการทำงานของเครื่องกลร่วม (Compound Machine) และคานอันดับ 3 ที่เน้นความว่องไวและระยะทาง</p>
+          </div>
+        </div>
+
+        <div class="room-tabs-nav">
+          <button class="tab-btn active" onclick="ArmLab.switchTab('explore')">🎮 <span>สำรวจอิสระ</span></button>
+          <button class="tab-btn" onclick="ArmLab.switchTab('theory')">📚 <span>ชีวกลศาสตร์ & เครื่องกลร่วม</span></button>
+          <button class="tab-btn" onclick="ArmLab.switchTab('predict')">🔮 <span>ลองทายก่อน</span></button>
+          <button class="tab-btn" onclick="ArmLab.switchTab('missions')">🎯 <span>ภารกิจ (3)</span></button>
+          <button class="tab-btn" onclick="ArmLab.switchTab('quiz')">📝 <span>ควิซท้ายห้อง</span></button>
+        </div>
+      </div>
+
+      <!-- TAB 1: EXPLORE -->
+      <div id="arm-tab-explore" class="tab-content-panel active">
+        <div class="lab-workbench">
+          <div class="sim-stage-card">
+            <div class="sim-stage-header">
+              <span class="stage-title">แท่นจำลองแขนกลอุตสาหกรรม 2 ข้อต่อ</span>
+              <div id="arm-status-badge" class="balance-status-badge info">
+                <span>🦾</span> <span id="arm-status-text">พร้อมสั่งการ: ปรับมุมข้อต่อเพื่อคีบกล่อง</span>
+              </div>
+            </div>
+
+            <div class="svg-container" id="arm-svg-container">
+              <svg class="sim-svg" id="arm-svg" viewBox="0 0 760 380">
+                <defs>
+                  <filter id="arm-shadow" x="-10%" y="-10%" width="130%" height="130%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.15" />
+                  </filter>
+                  <linearGradient id="arm-metal" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#475569" />
+                    <stop offset="50%" stop-color="#334155" />
+                    <stop offset="100%" stop-color="#1e293b" />
+                  </linearGradient>
+                  <linearGradient id="cylinder-grad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#93c5fd" />
+                    <stop offset="100%" stop-color="#2563eb" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Floor & Grid -->
+                <line x1="0" y1="330" x2="760" y2="330" stroke="#cbd5e1" stroke-width="4" />
+                <rect x="0" y="332" width="760" height="48" fill="#f1f5f9" />
+
+                <!-- Floor Distance Grid Ticks -->
+                <g id="arm-floor-ticks" opacity="0.4"></g>
+
+                <!-- Base Turret -->
+                <path d="M 110 330 L 130 280 L 190 280 L 210 330 Z" fill="#64748b" stroke="#334155" stroke-width="2" />
+                <circle cx="160" cy="280" r="14" fill="#3b82f6" stroke="#1d4ed8" stroke-width="3" />
+
+                <!-- Target High Shelf -->
+                <g id="target-shelf-group">
+                  <rect x="560" y="200" width="160" height="12" rx="3" fill="#8b5cf6" stroke="#6d28d9" stroke-width="2" filter="url(#arm-shadow)" />
+                  <rect x="630" y="212" width="20" height="118" fill="#a78bfa" stroke="#7c3aed" stroke-width="1.5" />
+                  <text x="640" y="190" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="12" fill="#7c3aed">แท่นวางเป้าหมาย (สูง 1.2 ม.)</text>
+                </g>
+
+                <!-- Target Placement Area Guide -->
+                <rect id="target-drop-zone" x="580" y="150" width="120" height="50" rx="6" fill="#f5f3ff" stroke="#c4b5fd" stroke-dasharray="4,4" stroke-width="2" />
+                <text x="640" y="178" text-anchor="middle" font-family="Prompt" font-size="11" fill="#8b5cf6">วางกล่องตรงนี้</text>
+
+                <!-- Robotic Arm Articulated Segments (Rendered by JS) -->
+                <g id="arm-segments-group"></g>
+
+                <!-- Movable Payload Box (5 kg) -->
+                <g id="arm-payload-box" style="cursor: pointer;">
+                  <rect id="box-rect" x="340" y="280" width="50" height="50" rx="6" fill="#f59e0b" stroke="#d97706" stroke-width="2" filter="url(#arm-shadow)" />
+                  <text id="box-text-mass" x="365" y="310" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="14" fill="#ffffff">5 kg</text>
+                  <text x="365" y="325" text-anchor="middle" font-family="Prompt" font-size="10" fill="#fef3c7">(50 N)</text>
+                </g>
+
+                <!-- Height / Distance Dimension Guides -->
+                <g id="arm-dimension-layer"></g>
+              </svg>
+            </div>
+
+            <!-- Telemetry Row -->
+            <div class="telemetry-row">
+              <div class="tele-cell">
+                <div class="tele-label">ความสูงปลายมือ (Y)</div>
+                <div class="tele-val primary" id="aval-height">0.50 m</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">ระยะเอื้อมแนวนอน (X)</div>
+                <div class="tele-val success" id="aval-reach">1.80 m</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">แรงกระบอกสูบ (F)</div>
+                <div class="tele-val accent" id="aval-force">450 N</div>
+              </div>
+              <div class="tele-cell">
+                <div class="tele-label">การได้เปรียบเชิงกล (M.A.)</div>
+                <div class="tele-val purple" id="aval-ma">0.11 (M.A. < 1)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls Panel -->
+          <div class="controls-panel">
+            <div class="panel-block-title">
+              <span>🦾 แผงควบคุมข้อต่อแขนกล</span>
+              <button class="btn-quick" onclick="ArmLab.resetPosition()" style="padding: 0.2rem 0.6rem; font-size: 0.8rem;">🔄 ตั้งท่าเริ่มต้น</button>
+            </div>
+
+            <div class="control-group">
+              <div class="slider-label-row">
+                <span>มุมข้อต่อหลัก / ข้อไหล่ (θ1)</span>
+                <span id="aval-joint1" class="slider-val-tag">45°</span>
+              </div>
+              <input type="range" id="slider-arm-joint1" min="15" max="80" step="1" value="45" oninput="ArmLab.onControlChange()">
+            </div>
+
+            <div class="control-group">
+              <div class="slider-label-row">
+                <span>มุมข้อต่อที่สอง / ข้อศอก (θ2)</span>
+                <span id="aval-joint2" class="slider-val-tag">50°</span>
+              </div>
+              <input type="range" id="slider-arm-joint2" min="10" max="95" step="1" value="50" oninput="ArmLab.onControlChange()">
+            </div>
+
+            <div class="control-group" style="padding-top: 0.5rem; border-top: 1px dashed var(--border);">
+              <button id="btn-gripper-action" class="btn-action-primary" onclick="ArmLab.toggleGripper()" style="background: #db2777; width: 100%; justify-content: center;">
+                🤏 <span>สั่ง "คีบจับกล่อง"</span>
+              </button>
+              <div id="gripper-hint" style="font-size: 0.8rem; color: var(--text-muted); text-align: center; margin-top: 0.35rem;">
+                ปรับมือจับให้ใกล้กล่อง 5 kg แล้วกดคีบ
+              </div>
+            </div>
+
+            <div style="background: #fdf2f8; border: 1px solid #fbcfe8; border-radius: var(--radius-md); padding: 0.75rem; font-size: 0.85rem; color: #9d174d;">
+              <div style="font-weight: 700; margin-bottom: 0.25rem;">💡 หลักการคานอันดับ 3 (Class 3 Lever):</div>
+              <p style="line-height: 1.5; font-size: 0.82rem;">
+                <strong>จุดหมุน (F)</strong> อยู่ที่โคนข้อต่อ -> <strong>แรงกระบอกสูบ (E)</strong> อยู่ใกล้จุดหมุน -> <strong>วัตถุ (W)</strong> อยู่ที่ปลายมือจับ<br>
+                <em>"แม้ต้องออกแรงดึงมากกว่าน้ำหนักจริง 10 เท่า แต่ปลายแขนจะกวาดไปได้ไกลและเร็วกว่ามหาศาล!"</em>
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: THEORY & BIOMECHANICS -->
+      <div id="arm-tab-theory" class="tab-content-panel">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💪 🦴</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">1. ชีวกลศาสตร์ในร่างกายมนุษย์</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              แขนของมนุษย์เราขณะยกของ จัดเป็น <strong>คานอันดับ 3</strong> อย่างสมบูรณ์แบบ:<br>
+              - <strong>จุดหมุน (F):</strong> ข้อศอก<br>
+              - <strong>แรงพยายาม (E):</strong> จุดที่เอ็นกล้ามเนื้อ Biceps เกาะกระดูกปลายแขน (ห่างศอกเพียง 3-4 ซม.)<br>
+              - <strong>แรงต้าน/น้ำหนัก (W):</strong> วัตถุที่วางอยู่บนฝ่ามือ (ห่างศอก 30-40 ซม.)<br>
+              กล้ามเนื้อต้องออกแรงดึงมากกว่าน้ำหนักวัตถุถึง 10 เท่าตัว!
+            </p>
+          </div>
+
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏃 ⚡</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">2. ทำไมถึงเลือกใช้คานอันดับ 3?</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              แม้ M.A. < 1 (ไม่ทุ่นแรงเลย และหนักแรงขึ้น)<br>
+              แต่สิ่งที่ได้กลับมาคือ <strong>"ความเร็วและระยะทางการเคลื่อนที่ (Speed & Range)"</strong>:<br>
+              - กล้ามเนื้อหรือกระบอกสูบหดตัวเพียง 1 เซนติเมตร<br>
+              - แต่ปลายมือจับจะกวัดแกว่งไปได้ไกลถึง 10-20 เซนติเมตรในพริบตา ทำให้มนุษย์ปาหิน วิ่ง หรือคีบของได้อย่างคล่องแคล่ว
+            </p>
+          </div>
+
+          <div style="background: white; border: 2px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem;">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏭 🤖</div>
+            <h3 style="font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem;">3. เครื่องกลร่วม (Compound Machines)</h3>
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6;">
+              แขนกลในโรงงานอุตสาหกรรม เป็นตัวอย่างของ <strong>เครื่องกลร่วม</strong> ที่นำเครื่องกลอย่างง่ายหลายชนิดมารวมกัน:<br>
+              - <strong>คาน:</strong> ท่อนแขนแต่ละข้อต่อ<br>
+              - <strong>เฟือง & มอเตอร์:</strong> ขับเคลื่อนและทดรอบแต่ละองศา<br>
+              - <strong>ลิ่ม / สกรู:</strong> ในตัวกริปเปอร์ที่ใช้หนีบคีบชิ้นงาน
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PREDICT -->
+      <div id="arm-tab-predict" class="tab-content-panel">
+        <div class="predict-box">
+          <div class="predict-header">
+            <span style="font-size: 1.8rem;">🔮</span>
+            <div>
+              <h3 id="arm-predict-title" style="font-size: 1.15rem; color: var(--text-main);">สถานการณ์ที่ 1: การเหยียดแขนตรง vs การงอแขนแนบชิดตัว</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">คิดวิเคราะห์ผลเชิงฟิสิกส์แล้วเลือกคำตอบที่ถูกต้องที่สุด</p>
+            </div>
+          </div>
+          <p id="arm-predict-desc" style="font-size: 1rem; color: var(--text-main); line-height: 1.6; margin-bottom: 1rem;">
+            เมื่อเราถือดัมเบลล์หนัก 5 กิโลกรัมไว้ในมือ ระหว่าง <strong>"งอแขนแนบชิดลำตัว"</strong> กับ <strong>"เหยียดแขนตรงขนานพื้นไปข้างหน้า"</strong> ท่าไหนกล้ามเนื้อและข้อต่อต้องออกแรงมากกว่ากัน?
+          </p>
+          <div class="predict-options-list" id="arm-predict-options"></div>
+          <div id="arm-predict-feedback" class="predict-feedback-card"></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: MISSIONS -->
+      <div id="arm-tab-missions" class="tab-content-panel">
+        <div class="missions-grid">
+          <!-- Mission 1 -->
+          <div class="mission-card" id="amission-card-1">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 1</span>
+                <span class="mission-star-icon" id="amstar-1">⭐</span>
+              </div>
+              <h3 class="mission-title">ลงไปคีบกล่อง 5 kg</h3>
+              <p class="mission-desc">ปรับมุมข้อไหล่และข้อศอกให้ปลายมือจับลงไปแตะกล่อง 5 kg แล้วกดปุ่ม "คีบจับกล่อง"</p>
+            </div>
+            <div id="amfb-1" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="ArmLab.verifyMission(1)">🎯 ตรวจสอบภารกิจที่ 1</button>
+          </div>
+
+          <!-- Mission 2 -->
+          <div class="mission-card" id="ammission-card-2">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 2</span>
+                <span class="mission-star-icon" id="amstar-2">⭐</span>
+              </div>
+              <h3 class="mission-title">ยกกล่องขึ้นลอยฟ้า (สูง ≥ 1.0 ม.)</h3>
+              <p class="mission-desc">หลังจากคีบกล่องได้ ให้ปรับมุมข้อต่อเพื่อยกกล่องขึ้นให้สูงพ้นพื้นอย่างน้อย 1.0 เมตร</p>
+            </div>
+            <div id="amfb-2" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="ArmLab.verifyMission(2)">🎯 ตรวจสอบภารกิจที่ 2</button>
+          </div>
+
+          <!-- Mission 3 -->
+          <div class="mission-card" id="ammission-card-3">
+            <div>
+              <div class="mission-top">
+                <span class="mission-badge">ภารกิจที่ 3</span>
+                <span class="mission-star-icon" id="amstar-3">⭐</span>
+              </div>
+              <h3 class="mission-title">วางกล่องบนชั้นวางเป้าหมาย</h3>
+              <p class="mission-desc">พากล่องเคลื่อนที่ไปยังตำแหน่งแท่นวางเป้าหมายด้านขวา และปล่อยกล่องลงวางได้อย่างปลอดภัย</p>
+            </div>
+            <div id="amfb-3" class="mission-verify-feedback"></div>
+            <button class="btn-action-primary" onclick="ArmLab.verifyMission(3)">🎯 ตรวจสอบภารกิจที่ 3</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: QUIZ -->
+      <div id="arm-tab-quiz" class="tab-content-panel">
+        <div class="quiz-container">
+          <form id="arm-quiz-form" onsubmit="event.preventDefault(); ArmLab.submitQuiz();">
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 1.</strong><span>แขนของมนุษย์และแขนกลส่วนใหญ่ จัดเป็นเครื่องกลอย่างง่ายประเภทใด?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="aq1" value="a" required><span>ก. คานอันดับ 3 (จุดหมุนอยู่ที่ข้อต่อ แรงกล้ามเนื้ออยู่ตรงกลาง น้ำหนักอยู่ที่ปลายมือ)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq1" value="b"><span>ข. คานอันดับ 2 (ช่วยผ่อนแรงเสมอ)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq1" value="c"><span>ค. รอกเดี่ยวตายตัว</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-aq1">💡 <strong>เฉลย ก:</strong> ถูกต้อง! แขนมนุษย์มีข้อศอกเป็นจุดหมุน กล้ามเนื้อ Biceps ออกแรงตรงกลาง และน้ำหนักอยู่ที่มือ จึงเป็นคานอันดับ 3</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 2.</strong><span>ข้อใดคือ <strong>"ข้อได้เปรียบที่สำคัญที่สุด"</strong> ของคานอันดับ 3 (ซึ่ง M.A. < 1 ไม่ช่วยผ่อนแรง)?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="aq2" value="a" required><span>ก. ช่วยลดพลังงานรวมที่ต้องใช้ให้เหลือศูนย์</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq2" value="b"><span>ข. ช่วยเพิ่มระยะทางและความเร็วในการเคลื่อนที่ ทำให้หยิบจับสิ่งของได้คล่องแคล่วและรวดเร็ว</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq2" value="c"><span>ค. ช่วยให้ยกของหนักเกินกำลังได้ง่ายดาย</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-aq2">💡 <strong>เฉลย ข:</strong> ถูกต้อง! คานอันดับ 3 แลกแรงที่มากกว่ากับความเร็วและช่วงระยะการเคลื่อนที่อันกว้างขวาง</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 3.</strong><span>เมื่อเราถือของหนักไว้ที่มือแล้ว "เหยียดแขนตรงไปข้างหน้า" ทำไมเราจึงรู้สึกหนักและเมื่อยล้ากว่าตอน "งอแขนแนบชิดตัว"?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="aq3" value="a" required><span>ก. เพราะระยะแขนของแรงต้าน (ระยะจากข้อหมุนถึงของ) ยาวขึ้น ทำให้เกิดโมเมนต์หมุนมากขึ้น กล้ามเนื้อจึงต้องออกแรงต้านเพิ่มขึ้นมหาศาล</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq3" value="b"><span>ข. เพราะน้ำหนักของวัตถุเพิ่มขึ้นเมื่อยืดแขน</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq3" value="c"><span>ค. เพราะแรงโน้มถ่วงของโลกเปลี่ยนทิศทาง</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-aq3">💡 <strong>เฉลย ก:</strong> ถูกต้อง! ยิ่งแขนของแรงต้านยาวขึ้น โมเมนต์ M = F × L ก็จะยิ่งมากขึ้น กล้ามเนื้อจึงต้องออกแรงดึงมากกว่าเดิมหลายเท่า!</div>
+            </div>
+
+            <div class="quiz-question-item">
+              <div class="quiz-q-title"><strong>ข้อ 4.</strong><span>เครื่องจักรที่มีชิ้นส่วนเครื่องกลอย่างง่ายหลายชนิดทำงานผสานกัน เรียกว่าอะไร?</span></div>
+              <div class="quiz-choices">
+                <label class="quiz-choice-label"><input type="radio" name="aq4" value="a" required><span>ก. เครื่องกลร่วม (Compound Machines)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq4" value="b"><span>ข. คานสมบูรณ์แบบ (Perpetual Lever)</span></label>
+                <label class="quiz-choice-label"><input type="radio" name="aq4" value="c"><span>ค. เครื่องกำเนิดแรงอิสระ</span></label>
+              </div>
+              <div class="quiz-explanation" id="exp-aq4">💡 <strong>เฉลย ก:</strong> ถูกต้อง! เครื่องกลร่วมคือการผสานคาน เฟือง ลิ่ม สกรู ล้อและเพลาเข้าด้วยกันเพื่อทำงานที่ซับซ้อน</div>
+            </div>
+
+            <div class="quiz-footer">
+              <div class="quiz-score-badge" id="arm-quiz-summary">กรุณาเลือกตอบทุกข้อแล้วกดส่งคำตอบ</div>
+              <button type="submit" class="btn-action-primary" style="padding: 0.75rem 1.75rem;">📝 ส่งคำตอบและบันทึกคะแนน</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- Celebration Toast -->
@@ -1545,9 +2395,265 @@
     </div>
   </div>
 
+  <!-- ========================================================================
+       MODAL 1: STUDENT SELECTOR & REGISTRATION
+       ======================================================================== -->
+  <div id="modal-select-student" class="modal-overlay">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.6rem;">🎓</span>
+          <div>
+            <h3 style="font-size: 1.25rem; line-height: 1.2;">เลือกรหัสนักเรียนเพื่อเข้าสู่ระบบบันทึกคะแนน</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">ระบบจะดึงคะแนนและดาวสะสมของนักเรียนจากฐานข้อมูลมาแสดงรายบุคคล</p>
+          </div>
+        </div>
+        <button class="btn-icon" onclick="App.closeModals()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Filter & Search Toolbar -->
+        <div class="student-filter-bar">
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="student-filter-btn active" id="sfilter-all" onclick="App.filterClassroom('all')">ทั้งหมด</button>
+            <button class="student-filter-btn" id="sfilter-1-1" onclick="App.filterClassroom('ม.1/1')">ม.1/1</button>
+            <button class="student-filter-btn" id="sfilter-1-2" onclick="App.filterClassroom('ม.1/2')">ม.1/2</button>
+          </div>
+          <input type="text" id="student-search-input" class="student-search-input" placeholder="🔍 ค้นหาด้วยชื่อ หรือรหัสนักเรียน..." oninput="App.onSearchStudent(this.value)">
+          <button class="btn-quick" onclick="App.toggleAddStudentForm()" style="background: #ecfdf5; border-color: #a7f3d0; color: #065f46; font-weight: 600;">
+            ➕ เพิ่มนักเรียนใหม่
+          </button>
+        </div>
+
+        <!-- Inline Add Student Form (Hidden by default) -->
+        <div id="add-student-form-container" style="display: none; background: #f8fafc; border: 2px dashed #93c5fd; border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+          <h4 style="font-size: 1rem; color: var(--primary-dark); margin-bottom: 0.75rem;">➕ ลงทะเบียนนักเรียนใหม่เข้าฐานข้อมูล</h4>
+          <form id="form-new-student" onsubmit="event.preventDefault(); App.submitNewStudent();" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">รหัสนักเรียน *</label>
+              <input type="text" id="new-std-code" required placeholder="เช่น 670113" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">คำนำหน้า</label>
+              <select id="new-std-prefix" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+                <option value="ด.ช.">ด.ช.</option>
+                <option value="ด.ญ.">ด.ญ.</option>
+                <option value="นาย">นาย</option>
+                <option value="น.ส.">น.ส.</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">ชื่อจริง *</label>
+              <input type="text" id="new-std-first" required placeholder="ชื่อจริง" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">นามสกุล *</label>
+              <input type="text" id="new-std-last" required placeholder="นามสกุล" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">ห้องเรียน</label>
+              <select id="new-std-room" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+                <option value="ม.1/1">ม.1/1</option>
+                <option value="ม.1/2">ม.1/2</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 600;">เลขที่</label>
+              <input type="number" id="new-std-roll" required min="1" max="60" value="13" style="width: 100%; padding: 0.4rem; border: 1px solid var(--border); border-radius: 6px;">
+            </div>
+            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 0.5rem;">
+              <button type="button" class="btn-quick" onclick="App.toggleAddStudentForm()">ยกเลิก</button>
+              <button type="submit" class="btn-action-primary" style="padding: 0.5rem 1.25rem;">💾 บันทึกเข้า Database</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Student Cards Grid -->
+        <div id="modal-student-grid" class="students-card-grid">
+          <!-- Populated dynamically by StemDB.renderStudentCards() -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: INDIVIDUAL STUDENT SCORECARD & REPORT
+       ======================================================================== -->
+  <div id="modal-student-profile" class="modal-overlay">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.6rem;">📜</span>
+          <div>
+            <h3 style="font-size: 1.25rem; line-height: 1.2;">สมุดพกคะแนนและผลการเรียนรายบุคคล</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">สรุปผลการทำแบบทดสอบและดาวความสำเร็จจากฐานข้อมูล</p>
+          </div>
+        </div>
+        <button class="btn-icon" onclick="App.closeModals()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Student Info Header -->
+        <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; border: 2px solid var(--border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div id="pcard-avatar" style="font-size: 3rem; background: white; width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);">👦</div>
+            <div>
+              <h2 id="pcard-name" style="font-size: 1.35rem; color: var(--text-main); line-height: 1.2;">ด.ช. กิตติศักดิ์ วงศ์สุวรรณ</h2>
+              <div id="pcard-meta" style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.2rem;">
+                รหัสนักเรียน: <strong>670101</strong> | ชั้น: <strong>ม.1/1</strong> | เลขที่: <strong>1</strong>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span id="pcard-badge-tier" class="badge-grade excellent" style="font-size: 0.95rem; padding: 0.4rem 0.85rem;">🏆 นักประดิษฐ์ยอดเยี่ยม</span>
+          </div>
+        </div>
+
+        <!-- Summary Stats 4-Tiles -->
+        <div class="teacher-stats-bar" style="margin-bottom: 1.5rem;">
+          <div class="stat-tile">
+            <div class="stat-tile-title">⭐ ดาวสะสมรวม</div>
+            <div class="stat-tile-val" id="pcard-total-stars" style="color: var(--accent-dark);">0 / 20</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">📝 คะแนนควิซรวม</div>
+            <div class="stat-tile-val" id="pcard-total-quiz" style="color: var(--primary);">0 / 20</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">🎯 ภารกิจสำเร็จ</div>
+            <div class="stat-tile-val" id="pcard-missions-done" style="color: var(--success);">0 / 15</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">📊 ผลการประเมิน</div>
+            <div class="stat-tile-val" id="pcard-percentage" style="color: var(--purple); font-size: 1.2rem;">0%</div>
+          </div>
+        </div>
+
+        <!-- Room Breakdown Table -->
+        <h4 style="font-size: 1.05rem; margin-bottom: 0.75rem; color: var(--text-main);">📋 รายละเอียดความสำเร็จแยกตามเครื่องกล 5 ชนิด</h4>
+        <div class="grade-table-wrapper" style="margin-bottom: 1.5rem;">
+          <table class="grade-table">
+            <thead>
+              <tr>
+                <th>เครื่องกล</th>
+                <th>ภารกิจที่ 1</th>
+                <th>ภารกิจที่ 2</th>
+                <th>ภารกิจที่ 3</th>
+                <th>คะแนนควิซ</th>
+                <th>ดาวรวมห้องนี้</th>
+                <th>สถานะ</th>
+              </tr>
+            </thead>
+            <tbody id="pcard-breakdown-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+          <button class="btn-quick" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+            🖨️ พิมพ์สมุดพก / บันทึกเป็น PDF
+          </button>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-action-secondary" onclick="App.openStudentModal()">🔄 สลับไปผู้เรียนคนอื่น</button>
+            <button class="btn-action-primary" onclick="App.closeModals()">ตกลง / ปิด</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: TEACHER DASHBOARD & GRADEBOOK
+       ======================================================================== -->
+  <div id="modal-teacher-dashboard" class="modal-overlay">
+    <div class="modal-window" style="max-width: 1080px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.6rem;">
+          <span style="font-size: 1.8rem;">📊</span>
+          <div>
+            <h3 style="font-size: 1.3rem; line-height: 1.2;">สมุดคะแนนและแดชบอร์ดคุณครู (Teacher Gradebook)</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">เชื่อมต่อฐานข้อมูล SQLite เรียลไทม์ ตรวจสอบคะแนนรายคนและดาวน์โหลดไฟล์ตัดเกรด</p>
+          </div>
+        </div>
+        <button class="btn-icon" onclick="App.closeModals()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Class Stats -->
+        <div class="teacher-stats-bar">
+          <div class="stat-tile">
+            <div class="stat-tile-title">👥 จำนวนนักเรียนทั้งหมด</div>
+            <div class="stat-tile-val" id="tstat-total-students">24 คน</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">⭐ ดาวสะสมเฉลี่ย</div>
+            <div class="stat-tile-val" id="tstat-avg-stars" style="color: var(--accent-dark);">0.0 ดาว</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">📝 คะแนนควิซเฉลี่ย</div>
+            <div class="stat-tile-val" id="tstat-avg-quiz" style="color: var(--primary);">0.0 / 20</div>
+          </div>
+          <div class="stat-tile">
+            <div class="stat-tile-title">🎯 อัตราผ่านเกณฑ์ (≥60%)</div>
+            <div class="stat-tile-val" id="tstat-pass-rate" style="color: var(--success);">0%</div>
+          </div>
+        </div>
+
+        <!-- Gradebook Controls -->
+        <div class="student-filter-bar" style="margin-top: 1rem;">
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="student-filter-btn active" id="tfilter-all" onclick="TeacherDashboard.filterClass('all')">ทุกห้อง</button>
+            <button class="student-filter-btn" id="tfilter-1-1" onclick="TeacherDashboard.filterClass('ม.1/1')">ม.1/1</button>
+            <button class="student-filter-btn" id="tfilter-1-2" onclick="TeacherDashboard.filterClass('ม.1/2')">ม.1/2</button>
+          </div>
+          <input type="text" class="student-search-input" placeholder="🔍 ค้นหาชื่อ หรือรหัสนักเรียน..." oninput="TeacherDashboard.search(this.value)">
+          <button class="btn-action-primary" onclick="TeacherDashboard.exportCSV()" style="background: #059669; gap: 0.4rem;">
+            📥 ส่งออกไฟล์ Excel / CSV
+          </button>
+          <button class="btn-quick" onclick="TeacherDashboard.refreshData()" title="ดึงข้อมูลล่าสุดจากฐานข้อมูล">
+            🔄 รีเฟรช
+          </button>
+        </div>
+
+        <!-- Gradebook Table -->
+        <div class="grade-table-wrapper">
+          <table class="grade-table">
+            <thead>
+              <tr>
+                <th>เลขที่</th>
+                <th>ห้อง</th>
+                <th>รหัส</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>คาน (4)</th>
+                <th>รอก (4)</th>
+                <th>ทางลาด (4)</th>
+                <th>เฟือง (4)</th>
+                <th>แขนกล (4)</th>
+                <th>รวมควิซ (20)</th>
+                <th>ดาวรวม (20)</th>
+                <th>ระดับประเมิน</th>
+                <th>การจัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-gradebook-tbody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; font-size: 0.85rem; color: var(--text-muted);">
+          <div>💡 เกณฑ์การตัดเกรด: ดาวรวม ≥ 18 (ยอดเยี่ยม), ≥ 12 (ดีมาก), ≥ 8 (ผ่านเกณฑ์)</div>
+          <button class="btn-action-secondary" onclick="App.closeModals()">ปิดหน้าต่าง</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
+
     /* ==========================================================================
-       Sound Synthesizer (Web Audio API)
+       1. SOUND SYNTHESIZER (Web Audio API)
        ========================================================================== */
     const Sound = {
       enabled: true,
@@ -1601,63 +2707,427 @@
     };
 
     /* ==========================================================================
-       App State & Star Manager
+       2. DATABASE CLIENT ENGINE (StemDB)
+       Supports both SQLite REST API (Server Mode) and Browser Storage (Local Mode)
+       ========================================================================== */
+    const StemDB = {
+      mode: 'local', // 'server' | 'local'
+      students: [],
+      
+      // Default Grade 7 Seed Directory (24 Thai students)
+      defaultSeed: [
+        { id: 1, student_code: "670101", prefix: "ด.ช.", first_name: "กิตติศักดิ์", last_name: "วงศ์สุวรรณ", classroom: "ม.1/1", roll_number: 1, gender: "ชาย", avatar: "👦", total_stars: 4, total_quiz_score: 4, completed_missions_count: 3 },
+        { id: 2, student_code: "670102", prefix: "ด.ช.", first_name: "ธนกร", last_name: "เจริญผล", classroom: "ม.1/1", roll_number: 2, gender: "ชาย", avatar: "🧑", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 3, student_code: "670103", prefix: "ด.ช.", first_name: "ปัณณธร", last_name: "ศรีสุข", classroom: "ม.1/1", roll_number: 3, gender: "ชาย", avatar: "👦", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 4, student_code: "670104", prefix: "ด.ช.", first_name: "ภูริชญ์", last_name: "มั่นคง", classroom: "ม.1/1", roll_number: 4, gender: "ชาย", avatar: "🧒", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 5, student_code: "670105", prefix: "ด.ช.", first_name: "วรเมธ", last_name: "รัตนพงศ์", classroom: "ม.1/1", roll_number: 5, gender: "ชาย", avatar: "🧑", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 6, student_code: "670106", prefix: "ด.ญ.", first_name: "กัญญารัตน์", last_name: "ชัยชนะ", classroom: "ม.1/1", roll_number: 6, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 7, student_code: "670107", prefix: "ด.ญ.", first_name: "ชนัญชิดา", last_name: "แสงทอง", classroom: "ม.1/1", roll_number: 7, gender: "หญิง", avatar: "👩", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 8, student_code: "670108", prefix: "ด.ญ.", first_name: "ฐิติมา", last_name: "พัฒนกิจ", classroom: "ม.1/1", roll_number: 8, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 9, student_code: "670109", prefix: "ด.ญ.", first_name: "นภัสสร", last_name: "สุริยา", classroom: "ม.1/1", roll_number: 9, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 10, student_code: "670110", prefix: "ด.ญ.", first_name: "พิมพิกา", last_name: "อัครเดช", classroom: "ม.1/1", roll_number: 10, gender: "หญิง", avatar: "👩", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 11, student_code: "670111", prefix: "ด.ช.", first_name: "ศุภวิชญ์", last_name: "ตั้งตระกูล", classroom: "ม.1/1", roll_number: 11, gender: "ชาย", avatar: "👦", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 12, student_code: "670112", prefix: "ด.ญ.", first_name: "อัญชิสา", last_name: "วิเศษสมบัติ", classroom: "ม.1/1", roll_number: 12, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 13, student_code: "670201", prefix: "ด.ช.", first_name: "ชนะภัย", last_name: "เกียรติสกุล", classroom: "ม.1/2", roll_number: 1, gender: "ชาย", avatar: "👦", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 14, student_code: "670202", prefix: "ด.ช.", first_name: "ณภัทร", last_name: "บุญญาธิการ", classroom: "ม.1/2", roll_number: 2, gender: "ชาย", avatar: "🧑", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 15, student_code: "670203", prefix: "ด.ช.", first_name: "เตชินท์", last_name: "อริยวงศ์", classroom: "ม.1/2", roll_number: 3, gender: "ชาย", avatar: "🧒", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 16, student_code: "670204", prefix: "ด.ช.", first_name: "ปุณณพัฒน์", last_name: "โชติช่วง", classroom: "ม.1/2", roll_number: 4, gender: "ชาย", avatar: "👦", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 17, student_code: "670205", prefix: "ด.ญ.", first_name: "จิรภิญญา", last_name: "พงษ์ไพศาล", classroom: "ม.1/2", roll_number: 5, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 18, student_code: "670206", prefix: "ด.ญ.", first_name: "ธันยพร", last_name: "เทพรักษา", classroom: "ม.1/2", roll_number: 6, gender: "หญิง", avatar: "👩", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 19, student_code: "670207", prefix: "ด.ญ.", first_name: "นิชาภา", last_name: "อภิสิทธิ์", classroom: "ม.1/2", roll_number: 7, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 20, student_code: "670208", prefix: "ด.ญ.", first_name: "ปรียาภรณ์", last_name: "ดำรงศิลป์", classroom: "ม.1/2", roll_number: 8, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 21, student_code: "670209", prefix: "ด.ญ.", first_name: "รินรดา", last_name: "เกียรติคุณ", classroom: "ม.1/2", roll_number: 9, gender: "หญิง", avatar: "👩", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 22, student_code: "670210", prefix: "ด.ญ.", first_name: "อมลวรรณ", last_name: "สิทธิเสรี", classroom: "ม.1/2", roll_number: 10, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 23, student_code: "670211", prefix: "ด.ช.", first_name: "อิทธิพัฒน์", last_name: "เมธากุล", classroom: "ม.1/2", roll_number: 11, gender: "ชาย", avatar: "🧑", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 },
+        { id: 24, student_code: "670212", prefix: "ด.ญ.", first_name: "วรินทร", last_name: "ชูโชค", classroom: "ม.1/2", roll_number: 12, gender: "หญิง", avatar: "👧", total_stars: 0, total_quiz_score: 0, completed_missions_count: 0 }
+      ],
+
+      async init() {
+        try {
+          const res = await fetch('/api/health', { cache: 'no-store' });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'ok') {
+              this.mode = 'server';
+              this.updateDbStatusBadge(true);
+              await this.fetchStudents();
+              return;
+            }
+          }
+        } catch (e) {
+          // Fallback to local mode
+        }
+        this.mode = 'local';
+        this.updateDbStatusBadge(false);
+        this.initLocalDB();
+      },
+
+      updateDbStatusBadge(isServer) {
+        const dot = document.getElementById('db-indicator-dot');
+        const txt = document.getElementById('db-indicator-text');
+        const pill = document.getElementById('header-db-status');
+        if (isServer) {
+          dot.textContent = '🟢';
+          txt.textContent = 'SQLite DB (Server)';
+          pill.classList.remove('offline');
+          pill.title = 'เชื่อมต่อฐานข้อมูล SQLite (server.py) เรียลไทม์';
+        } else {
+          dot.textContent = '🟡';
+          txt.textContent = 'Local DB (Browser)';
+          pill.classList.add('offline');
+          pill.title = 'ฐานข้อมูลแบบ Local ในเบราว์เซอร์ (เปิดใช้งานโดยตรงได้ 100%)';
+        }
+      },
+
+      initLocalDB() {
+        const saved = localStorage.getItem('stem_local_students_v3');
+        if (saved) {
+          try {
+            this.students = JSON.parse(saved);
+          } catch (e) {
+            this.students = this.defaultSeed;
+          }
+        } else {
+          this.students = this.defaultSeed;
+          this.saveLocalDB();
+        }
+      },
+
+      saveLocalDB() {
+        try {
+          localStorage.setItem('stem_local_students_v3', JSON.stringify(this.students));
+        } catch (e) {}
+      },
+
+      async fetchStudents(classroom = null, search = null) {
+        if (this.mode === 'server') {
+          let url = '/api/students';
+          const params = [];
+          if (classroom && classroom !== 'all') params.push(`classroom=${encodeURIComponent(classroom)}`);
+          if (search) params.push(`search=${encodeURIComponent(search)}`);
+          if (params.length > 0) url += '?' + params.join('&');
+          const res = await fetch(url);
+          this.students = await res.json();
+        } else {
+          let list = [...this.students];
+          if (classroom && classroom !== 'all') {
+            list = list.filter(s => s.classroom === classroom);
+          }
+          if (search) {
+            const q = search.toLowerCase();
+            list = list.filter(s => (s.first_name + ' ' + s.last_name + ' ' + s.student_code).toLowerCase().includes(q));
+          }
+          return list;
+        }
+        return this.students;
+      },
+
+      async getStudent(id) {
+        if (this.mode === 'server') {
+          try {
+            const res = await fetch(`/api/students/${id}`);
+            if (res.ok) return await res.json();
+          } catch (e) {}
+        }
+        // Local fallback
+        const s = this.students.find(st => st.id === Number(id));
+        if (!s) return null;
+
+        // Retrieve local progress for this student
+        let stars = {
+          lever: { m1: false, m2: false, m3: false, quiz: false },
+          pulley: { m1: false, m2: false, m3: false, quiz: false },
+          incline: { m1: false, m2: false, m3: false, quiz: false },
+          gears: { m1: false, m2: false, m3: false, quiz: false },
+          arm: { m1: false, m2: false, m3: false, quiz: false }
+        };
+        const rawStars = localStorage.getItem(`stem_stars_student_${id}`);
+        if (rawStars) {
+          try { stars = Object.assign(stars, JSON.parse(rawStars)); } catch (e) {}
+        }
+
+        let quizHistory = [];
+        const rawHistory = localStorage.getItem(`stem_quizzes_student_${id}`);
+        if (rawHistory) {
+          try { quizHistory = JSON.parse(rawHistory); } catch (e) {}
+        }
+
+        return {
+          student: s,
+          stars: stars,
+          total_stars: s.total_stars,
+          total_quiz_score: s.total_quiz_score,
+          completed_missions_count: s.completed_missions_count,
+          quiz_history: quizHistory
+        };
+      },
+
+      async addStudent(newStudent) {
+        if (this.mode === 'server') {
+          const res = await fetch('/api/students', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newStudent)
+          });
+          const created = await res.json();
+          await this.fetchStudents();
+          return created;
+        } else {
+          const newId = this.students.length > 0 ? Math.max(...this.students.map(s => s.id)) + 1 : 1;
+          const created = Object.assign({
+            id: newId,
+            full_name: `${newStudent.prefix}${newStudent.first_name} ${newStudent.last_name}`,
+            total_stars: 0,
+            total_quiz_score: 0,
+            completed_missions_count: 0
+          }, newStudent);
+          this.students.push(created);
+          this.saveLocalDB();
+          return created;
+        }
+      },
+
+      async saveMission(studentId, roomId, missionKey) {
+        if (this.mode === 'server') {
+          try {
+            await fetch('/api/missions', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ student_id: studentId, room_id: roomId, mission_key: missionKey })
+            });
+            await this.fetchStudents();
+          } catch (e) {}
+        } else {
+          // Local storage update
+          let stars = { lever: {}, pulley: {}, incline: {}, gears: {}, arm: {} };
+          const raw = localStorage.getItem(`stem_stars_student_${studentId}`);
+          if (raw) { try { stars = JSON.parse(raw); } catch (e) {} }
+          if (!stars[roomId]) stars[roomId] = {};
+          stars[roomId][missionKey] = true;
+          localStorage.setItem(`stem_stars_student_${studentId}`, JSON.stringify(stars));
+
+          // Recalculate stars for local student
+          const s = this.students.find(st => st.id === Number(studentId));
+          if (s) {
+            let total = 0, missions = 0;
+            for (let r in stars) {
+              for (let k in stars[r]) {
+                if (stars[r][k]) {
+                  total++;
+                  if (k !== 'quiz') missions++;
+                }
+              }
+            }
+            s.total_stars = total;
+            s.completed_missions_count = missions;
+            this.saveLocalDB();
+          }
+        }
+      },
+
+      async saveQuizScore(studentId, roomId, roomTitle, score, maxScore, answers) {
+        if (this.mode === 'server') {
+          try {
+            const res = await fetch('/api/scores', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                student_id: studentId,
+                room_id: roomId,
+                room_title: roomTitle,
+                score: score,
+                max_score: maxScore,
+                answers: answers
+              })
+            });
+            await this.fetchStudents();
+            return await res.json();
+          } catch (e) {}
+        } else {
+          // Local update
+          let history = [];
+          const rawH = localStorage.getItem(`stem_quizzes_student_${studentId}`);
+          if (rawH) { try { history = JSON.parse(rawH); } catch (e) {} }
+          history.unshift({
+            room_id: roomId,
+            room_title: roomTitle,
+            score: score,
+            max_score: maxScore,
+            percentage: Math.round((score / maxScore) * 100),
+            passed: score === maxScore,
+            completed_at: new Date().toISOString()
+          });
+          localStorage.setItem(`stem_quizzes_student_${studentId}`, JSON.stringify(history));
+
+          // Award star if score == 4
+          if (score === maxScore) {
+            let stars = { lever: {}, pulley: {}, incline: {}, gears: {}, arm: {} };
+            const rawS = localStorage.getItem(`stem_stars_student_${studentId}`);
+            if (rawS) { try { stars = JSON.parse(rawS); } catch (e) {} }
+            if (!stars[roomId]) stars[roomId] = {};
+            stars[roomId]['quiz'] = true;
+            localStorage.setItem(`stem_stars_student_${studentId}`, JSON.stringify(stars));
+          }
+
+          // Recalculate summary
+          const s = this.students.find(st => st.id === Number(studentId));
+          if (s) {
+            let totalStars = 0, missions = 0;
+            const rawS = localStorage.getItem(`stem_stars_student_${studentId}`);
+            if (rawS) {
+              const stars = JSON.parse(rawS);
+              for (let r in stars) {
+                for (let k in stars[r]) {
+                  if (stars[r][k]) {
+                    totalStars++;
+                    if (k !== 'quiz') missions++;
+                  }
+                }
+              }
+            }
+            // Best quiz scores
+            const bestPerRoom = {};
+            history.forEach(item => {
+              if (!bestPerRoom[item.room_id] || item.score > bestPerRoom[item.room_id]) {
+                bestPerRoom[item.room_id] = item.score;
+              }
+            });
+            const totalQuiz = Object.values(bestPerRoom).reduce((a, b) => a + b, 0);
+
+            s.total_stars = totalStars;
+            s.total_quiz_score = totalQuiz;
+            s.completed_missions_count = missions;
+            this.saveLocalDB();
+          }
+        }
+      },
+
+      async resetStudent(studentId) {
+        if (this.mode === 'server') {
+          await fetch('/api/reset-student', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ student_id: studentId })
+          });
+          await this.fetchStudents();
+        } else {
+          localStorage.removeItem(`stem_stars_student_${studentId}`);
+          localStorage.removeItem(`stem_quizzes_student_${studentId}`);
+          const s = this.students.find(st => st.id === Number(studentId));
+          if (s) {
+            s.total_stars = 0;
+            s.total_quiz_score = 0;
+            s.completed_missions_count = 0;
+            this.saveLocalDB();
+          }
+        }
+      }
+    };
+
+    /* ==========================================================================
+       3. APP CONTROLLER & STATE MANAGER
        ========================================================================== */
     const App = {
+      activeStudent: null,
       state: {
         stars: {
           lever: { m1: false, m2: false, m3: false, quiz: false },
           pulley: { m1: false, m2: false, m3: false, quiz: false },
           incline: { m1: false, m2: false, m3: false, quiz: false },
-          gears: {},
-          arm: {}
+          gears: { m1: false, m2: false, m3: false, quiz: false },
+          arm: { m1: false, m2: false, m3: false, quiz: false }
         }
       },
-      init() {
-        this.loadProgress();
+
+      async init() {
+        await StemDB.init();
+
+        // Check if student was previously selected
+        const savedId = localStorage.getItem('stem_active_student_id');
+        let initialId = savedId ? Number(savedId) : 1; // Default to student 1
+        
+        await this.selectStudent(initialId, false);
         this.updateStarUI();
       },
-      loadProgress() {
-        try {
-          const saved = localStorage.getItem('stem_simple_machines_progress_v2');
-          if (saved) this.state.stars = JSON.parse(saved);
-        } catch (e) {}
-      },
-      saveProgress() {
-        try {
-          localStorage.setItem('stem_simple_machines_progress_v2', JSON.stringify(this.state.stars));
-        } catch (e) {}
+
+      async selectStudent(id, notify = true) {
+        const data = await StemDB.getStudent(id);
+        if (!data || !data.student) return;
+
+        this.activeStudent = data.student;
+        localStorage.setItem('stem_active_student_id', id);
+
+        this.state.stars = data.stars || {
+          lever: { m1: false, m2: false, m3: false, quiz: false },
+          pulley: { m1: false, m2: false, m3: false, quiz: false },
+          incline: { m1: false, m2: false, m3: false, quiz: false },
+          gears: { m1: false, m2: false, m3: false, quiz: false },
+          arm: { m1: false, m2: false, m3: false, quiz: false }
+        };
+
+        this.updateHeaderStudentUI();
         this.updateStarUI();
-      },
-      resetProgress() {
-        if (confirm('คุณต้องการรีเซ็ตดาวและความก้าวหน้าทั้งหมดเพื่อเริ่มเล่นใหม่ใช่หรือไม่?')) {
-          this.state.stars = {
-            lever: { m1: false, m2: false, m3: false, quiz: false },
-            pulley: { m1: false, m2: false, m3: false, quiz: false },
-            incline: { m1: false, m2: false, m3: false, quiz: false },
-            gears: {},
-            arm: {}
-          };
-          this.saveProgress();
-          LeverLab.updateMissionsUI();
-          PulleyLab.updateMissionsUI();
-          InclineLab.updateMissionsUI();
-          this.showToast('รีเซ็ตสำเร็จ', 'เริ่มการเดินทางครั้งใหม่ได้เลย!');
+        this.closeModals();
+
+        // Refresh lab mission markers for current student
+        if (window.LeverLab) LeverLab.updateMissionsUI();
+        if (window.PulleyLab) PulleyLab.updateMissionsUI();
+        if (window.InclineLab) InclineLab.updateMissionsUI();
+        if (window.GearsLab) GearsLab.updateMissionsUI();
+        if (window.ArmLab) ArmLab.updateMissionsUI();
+
+        if (notify) {
+          Sound.click();
+          this.showToast('เข้าสู่ระบบสำเร็จ', `กำลังบันทึกคะแนนให้: ${this.activeStudent.prefix}${this.activeStudent.first_name} (${this.activeStudent.classroom})`);
         }
       },
-      awardStar(room, key) {
+
+      updateHeaderStudentUI() {
+        if (!this.activeStudent) return;
+        const s = this.activeStudent;
+        const pill = document.getElementById('header-student-pill');
+        pill.classList.remove('unselected');
+        pill.classList.add('active');
+
+        document.getElementById('header-student-avatar').textContent = s.avatar || '👦';
+        document.getElementById('header-student-name').textContent = `${s.prefix}${s.first_name} ${s.last_name}`;
+        document.getElementById('header-student-class').textContent = `${s.classroom} เลขที่ ${s.roll_number} [คลิกสลับ]`;
+
+        // Home Active Bar
+        document.getElementById('welcome-student-avatar').textContent = s.avatar || '👦';
+        document.getElementById('welcome-student-name').textContent = `${s.prefix}${s.first_name} ${s.last_name} (${s.classroom} เลขที่ ${s.roll_number})`;
+        document.getElementById('welcome-student-meta').innerHTML = `รหัสนักเรียน: <strong>${s.student_code}</strong> | ดาวสะสม: <strong id="welcome-stars">${s.total_stars}</strong>/20 ดาว | คะแนนควิซรวม: <strong id="welcome-quiz">${s.total_quiz_score}</strong>/20`;
+      },
+
+      async awardStar(room, key) {
+        if (!this.activeStudent) {
+          this.openStudentModal();
+          this.showToast('กรุณาเลือกนักเรียน', 'เพื่อบันทึกดาวลงฐานข้อมูล');
+          return;
+        }
+
         if (!this.state.stars[room]) this.state.stars[room] = {};
         if (!this.state.stars[room][key]) {
           this.state.stars[room][key] = true;
-          this.saveProgress();
+          await StemDB.saveMission(this.activeStudent.id, room, key);
+          
+          // Refresh active student stats
+          const updated = await StemDB.getStudent(this.activeStudent.id);
+          if (updated && updated.student) {
+            this.activeStudent = updated.student;
+          }
+
           Sound.correctFanfare();
-          this.showToast('ได้รับ 1 ดาว ⭐!', 'ยอดเยี่ยมมาก พยายามต่อไปนะ');
+          this.updateStarUI();
+          this.showToast('ได้รับ 1 ดาว ⭐!', 'บันทึกความก้าวหน้าลง Database เรียบร้อย');
         }
       },
+
       getRoomStars(room) {
         if (!this.state.stars[room]) return 0;
         return Object.values(this.state.stars[room]).filter(Boolean).length;
       },
+
       getTotalStars() {
         let total = 0;
         for (let r in this.state.stars) {
@@ -1665,14 +3135,24 @@
         }
         return total;
       },
+
       updateStarUI() {
         const total = this.getTotalStars();
         document.getElementById('global-star-count').textContent = total;
         document.getElementById('home-total-stars-text').textContent = total;
-        document.getElementById('card-stars-lever').textContent = this.getRoomStars('lever');
-        document.getElementById('card-stars-pulley').textContent = this.getRoomStars('pulley');
-        document.getElementById('card-stars-incline').textContent = this.getRoomStars('incline');
+        if (document.getElementById('welcome-stars')) {
+          document.getElementById('welcome-stars').textContent = total;
+        }
+
+        ['lever', 'pulley', 'incline', 'gears', 'arm'].forEach(r => {
+          const count = this.getRoomStars(r);
+          const cardEl = document.getElementById(`card-stars-${r}`);
+          if (cardEl) cardEl.textContent = count;
+          const roomEl = document.getElementById(`room-stars-${r}`);
+          if (roomEl) roomEl.textContent = count;
+        });
       },
+
       showToast(title, msg) {
         const toast = document.getElementById('toast');
         document.getElementById('toast-title').textContent = title;
@@ -1680,6 +3160,7 @@
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3500);
       },
+
       navigateHome() {
         Sound.click();
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -1687,6 +3168,7 @@
         document.getElementById('btn-back-home').style.display = 'none';
         window.scrollTo({ top: 0, behavior: 'smooth' });
       },
+
       enterRoom(roomName) {
         Sound.click();
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -1698,13 +3180,343 @@
           if (roomName === 'lever') LeverLab.init();
           if (roomName === 'pulley') PulleyLab.init();
           if (roomName === 'incline') InclineLab.init();
+          if (roomName === 'gears') GearsLab.init();
+          if (roomName === 'arm') ArmLab.init();
+        }
+      },
+
+      /* Modals Management */
+      async openStudentModal() {
+        Sound.click();
+        this.renderStudentCards();
+        document.getElementById('modal-select-student').classList.add('open');
+      },
+
+      async openStudentProfileModal() {
+        if (!this.activeStudent) {
+          this.openStudentModal();
+          return;
+        }
+        Sound.click();
+        const data = await StemDB.getStudent(this.activeStudent.id);
+        const s = data.student;
+        
+        document.getElementById('pcard-avatar').textContent = s.avatar || '👦';
+        document.getElementById('pcard-name').textContent = `${s.prefix}${s.first_name} ${s.last_name}`;
+        document.getElementById('pcard-meta').innerHTML = `รหัสนักเรียน: <strong>${s.student_code}</strong> | ชั้น: <strong>${s.classroom}</strong> | เลขที่: <strong>${s.roll_number}</strong>`;
+        
+        const totalStars = data.total_stars || 0;
+        const totalQuiz = data.total_quiz_score || 0;
+        const missionsCount = data.completed_missions_count || 0;
+        const percentage = Math.round((totalStars / 20) * 100);
+
+        document.getElementById('pcard-total-stars').textContent = `${totalStars} / 20`;
+        document.getElementById('pcard-total-quiz').textContent = `${totalQuiz} / 20`;
+        document.getElementById('pcard-missions-done').textContent = `${missionsCount} / 15`;
+        document.getElementById('pcard-percentage').textContent = `${percentage}%`;
+
+        // Tier badge
+        const tierBadge = document.getElementById('pcard-badge-tier');
+        if (totalStars >= 18) {
+          tierBadge.className = 'badge-grade excellent';
+          tierBadge.textContent = '🏆 นักประดิษฐ์ระดับเซียน (ยอดเยี่ยม)';
+        } else if (totalStars >= 12) {
+          tierBadge.className = 'badge-grade good';
+          tierBadge.textContent = '⭐ นักประดิษฐ์ชำนาญการ (ดีมาก)';
+        } else if (totalStars >= 8) {
+          tierBadge.className = 'badge-grade pass';
+          tierBadge.textContent = '✅ ผ่านเกณฑ์ขั้นพื้นฐาน';
+        } else {
+          tierBadge.className = 'badge-grade needs-work';
+          tierBadge.textContent = '🌱 กำลังเริ่มต้นเรียนรู้';
+        }
+
+        // Room breakdown table
+        const tbody = document.getElementById('pcard-breakdown-tbody');
+        tbody.innerHTML = '';
+        const roomMeta = [
+          { id: 'lever', title: '1. คาน (Lever)' },
+          { id: 'pulley', title: '2. รอก (Pulley)' },
+          { id: 'incline', title: '3. ทางลาด (Incline)' },
+          { id: 'gears', title: '4. เฟือง (Gears)' },
+          { id: 'arm', title: '5. แขนกล (Robotic Arm)' }
+        ];
+
+        roomMeta.forEach(rm => {
+          const rStars = data.stars[rm.id] || {};
+          const m1 = rStars.m1 ? '⭐ ผ่าน' : '—';
+          const m2 = rStars.m2 ? '⭐ ผ่าน' : '—';
+          const m3 = rStars.m3 ? '⭐ ผ่าน' : '—';
+          const qQuiz = rStars.quiz ? '⭐ 4/4 เต็ม' : 'ทำแล้ว / กำลังทำ';
+          const roomTotal = Object.values(rStars).filter(Boolean).length;
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-weight: 600;">${rm.title}</td>
+            <td style="color: ${rStars.m1 ? '#059669' : '#94a3b8'};">${m1}</td>
+            <td style="color: ${rStars.m2 ? '#059669' : '#94a3b8'};">${m2}</td>
+            <td style="color: ${rStars.m3 ? '#059669' : '#94a3b8'};">${m3}</td>
+            <td style="font-weight: 600;">${qQuiz}</td>
+            <td style="font-weight: 700; color: var(--accent-dark);">⭐ ${roomTotal}/4</td>
+            <td><span class="badge-grade ${roomTotal === 4 ? 'excellent' : (roomTotal >= 2 ? 'pass' : 'needs-work')}">${roomTotal === 4 ? 'สมบูรณ์ 100%' : 'กำลังทำ'}</span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('modal-student-profile').classList.add('open');
+      },
+
+      openTeacherDashboard() {
+        Sound.click();
+        TeacherDashboard.open();
+      },
+
+      closeModals() {
+        document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
+      },
+
+      filterClassroom(cls) {
+        ['all', '1-1', '1-2'].forEach(k => {
+          const el = document.getElementById(`sfilter-${k}`);
+          if (el) el.classList.remove('active');
+        });
+        if (cls === 'all') document.getElementById('sfilter-all').classList.add('active');
+        if (cls === 'ม.1/1') document.getElementById('sfilter-1-1').classList.add('active');
+        if (cls === 'ม.1/2') document.getElementById('sfilter-1-2').classList.add('active');
+        this.renderStudentCards(cls, document.getElementById('student-search-input').value);
+      },
+
+      onSearchStudent(keyword) {
+        let activeCls = 'all';
+        if (document.getElementById('sfilter-1-1').classList.contains('active')) activeCls = 'ม.1/1';
+        if (document.getElementById('sfilter-1-2').classList.contains('active')) activeCls = 'ม.1/2';
+        this.renderStudentCards(activeCls, keyword);
+      },
+
+      async renderStudentCards(classroom = 'all', search = '') {
+        const grid = document.getElementById('modal-student-grid');
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">กำลังโหลดข้อมูลนักเรียน...</div>';
+
+        const list = await StemDB.fetchStudents(classroom, search);
+        grid.innerHTML = '';
+
+        if (!list || list.length === 0) {
+          grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">ไม่พบข้อมูลนักเรียนตามเงื่อนไขที่ค้นหา</div>';
+          return;
+        }
+
+        list.forEach(s => {
+          const isCurrent = this.activeStudent && this.activeStudent.id === s.id;
+          const card = document.createElement('div');
+          card.className = `student-select-card ${isCurrent ? 'active-student' : ''}`;
+          card.onclick = () => this.selectStudent(s.id);
+          card.innerHTML = `
+            <div class="scard-top">
+              <span style="font-size: 1.5rem;">${s.avatar || '👦'}</span>
+              <span class="scard-score-pill">⭐ ${s.total_stars || 0} ดาว</span>
+            </div>
+            <div class="scard-name">${s.prefix}${s.first_name} ${s.last_name}</div>
+            <div class="scard-meta">
+              ห้อง ${s.classroom} | เลขที่ ${s.roll_number}<br>
+              รหัส: <strong>${s.student_code}</strong>
+            </div>
+            ${isCurrent ? '<div style="font-size: 0.75rem; color: var(--primary); font-weight: 700; margin-top: 0.2rem;">✓ กำลังใช้งาน</div>' : ''}
+          `;
+          grid.appendChild(card);
+        });
+      },
+
+      toggleAddStudentForm() {
+        const container = document.getElementById('add-student-form-container');
+        container.style.display = container.style.display === 'none' ? 'block' : 'none';
+      },
+
+      async submitNewStudent() {
+        const code = document.getElementById('new-std-code').value.trim();
+        const prefix = document.getElementById('new-std-prefix').value;
+        const first = document.getElementById('new-std-first').value.trim();
+        const last = document.getElementById('new-std-last').value.trim();
+        const room = document.getElementById('new-std-room').value;
+        const roll = Number(document.getElementById('new-std-roll').value);
+        const gender = prefix === 'ด.ญ.' || prefix === 'น.ส.' ? 'หญิง' : 'ชาย';
+        const avatar = gender === 'หญิง' ? '👧' : '👦';
+
+        if (!code || !first || !last) {
+          alert('กรุณากรอกข้อมูลให้ครบทุกช่อง');
+          return;
+        }
+
+        try {
+          const created = await StemDB.addStudent({
+            student_code: code,
+            prefix: prefix,
+            first_name: first,
+            last_name: last,
+            classroom: room,
+            roll_number: roll,
+            gender: gender,
+            avatar: avatar
+          });
+
+          this.toggleAddStudentForm();
+          await this.renderStudentCards();
+          await this.selectStudent(created.id);
+          this.showToast('เพิ่มนักเรียนสำเร็จ!', `เพิ่ม ${prefix}${first} ${last} เข้าฐานข้อมูลเรียบร้อย`);
+        } catch (e) {
+          alert('เกิดข้อผิดพลาดในการเพิ่มนักเรียน: ' + e);
+        }
+      },
+
+      async resetCurrentStudentProgress() {
+        if (!this.activeStudent) return;
+        if (confirm(`คุณต้องการรีเซ็ตดาวและความก้าวหน้าของ ${this.activeStudent.prefix}${this.activeStudent.first_name} ใช่หรือไม่?`)) {
+          await StemDB.resetStudent(this.activeStudent.id);
+          await this.selectStudent(this.activeStudent.id, false);
+          this.showToast('รีเซ็ตสำเร็จ', 'ดาวและคะแนนถูกล้างเรียบร้อย');
         }
       }
     };
 
     /* ==========================================================================
-       ROOM 1: LEVER LAB ENGINE
+       4. TEACHER DASHBOARD CONTROLLER
        ========================================================================== */
+    const TeacherDashboard = {
+      currentClass: 'all',
+      searchKeyword: '',
+      dataCache: [],
+
+      async open() {
+        document.getElementById('modal-teacher-dashboard').classList.add('open');
+        await this.refreshData();
+      },
+
+      async refreshData() {
+        const tbody = document.getElementById('teacher-gradebook-tbody');
+        tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 2rem;">กำลังโหลดข้อมูลจาก Database...</td></tr>';
+
+        this.dataCache = await StemDB.fetchStudents(this.currentClass, this.searchKeyword);
+        this.renderStats();
+        this.renderTable();
+      },
+
+      renderStats() {
+        const list = this.dataCache || [];
+        const total = list.length;
+        document.getElementById('tstat-total-students').textContent = `${total} คน`;
+
+        if (total === 0) {
+          document.getElementById('tstat-avg-stars').textContent = '0.0 ดาว';
+          document.getElementById('tstat-avg-quiz').textContent = '0.0 / 20';
+          document.getElementById('tstat-pass-rate').textContent = '0%';
+          return;
+        }
+
+        const sumStars = list.reduce((acc, s) => acc + (s.total_stars || 0), 0);
+        const sumQuiz = list.reduce((acc, s) => acc + (s.total_quiz_score || 0), 0);
+        const passedCount = list.filter(s => (s.total_stars || 0) >= 8).length;
+
+        document.getElementById('tstat-avg-stars').textContent = `${(sumStars / total).toFixed(1)} ดาว`;
+        document.getElementById('tstat-avg-quiz').textContent = `${(sumQuiz / total).toFixed(1)} / 20`;
+        document.getElementById('tstat-pass-rate').textContent = `${Math.round((passedCount / total) * 100)}%`;
+      },
+
+      async renderTable() {
+        const tbody = document.getElementById('teacher-gradebook-tbody');
+        tbody.innerHTML = '';
+
+        if (!this.dataCache || this.dataCache.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="13" style="text-align: center; padding: 2rem; color: var(--text-muted);">ไม่มีข้อมูลนักเรียน</td></tr>';
+          return;
+        }
+
+        for (const s of this.dataCache) {
+          // Get stars / scores for this student
+          const details = await StemDB.getStudent(s.id);
+          const stars = details ? details.stars : {};
+
+          // Quiz points per room (4 points if quiz star earned or best score)
+          const leverQ = stars.lever && stars.lever.quiz ? 4 : 0;
+          const pulleyQ = stars.pulley && stars.pulley.quiz ? 4 : 0;
+          const inclineQ = stars.incline && stars.incline.quiz ? 4 : 0;
+          const gearsQ = stars.gears && stars.gears.quiz ? 4 : 0;
+          const armQ = stars.arm && stars.arm.quiz ? 4 : 0;
+
+          const totalStars = s.total_stars || 0;
+          const totalQuiz = s.total_quiz_score || (leverQ + pulleyQ + inclineQ + gearsQ + armQ);
+
+          let gradeBadge = '<span class="badge-grade needs-work">กำลังเรียนรู้</span>';
+          if (totalStars >= 18) gradeBadge = '<span class="badge-grade excellent">ยอดเยี่ยม</span>';
+          else if (totalStars >= 12) gradeBadge = '<span class="badge-grade good">ดีมาก</span>';
+          else if (totalStars >= 8) gradeBadge = '<span class="badge-grade pass">ผ่านเกณฑ์</span>';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td><strong>${s.roll_number}</strong></td>
+            <td>${s.classroom}</td>
+            <td><code>${s.student_code}</code></td>
+            <td>${s.avatar || '👦'} ${s.prefix}${s.first_name} ${s.last_name}</td>
+            <td style="text-align: center;">${leverQ}</td>
+            <td style="text-align: center;">${pulleyQ}</td>
+            <td style="text-align: center;">${inclineQ}</td>
+            <td style="text-align: center;">${gearsQ}</td>
+            <td style="text-align: center;">${armQ}</td>
+            <td style="font-weight: 700; color: var(--primary); text-align: center;">${totalQuiz} / 20</td>
+            <td style="font-weight: 700; color: var(--accent-dark); text-align: center;">⭐ ${totalStars} / 20</td>
+            <td>${gradeBadge}</td>
+            <td>
+              <button class="btn-quick" onclick="App.selectStudent(${s.id})" style="padding: 0.2rem 0.5rem; font-size: 0.78rem;">
+                สลับมาคนนี้
+              </button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        }
+      },
+
+      filterClass(cls) {
+        this.currentClass = cls;
+        ['all', '1-1', '1-2'].forEach(k => {
+          const el = document.getElementById(`tfilter-${k}`);
+          if (el) el.classList.remove('active');
+        });
+        if (cls === 'all') document.getElementById('tfilter-all').classList.add('active');
+        if (cls === 'ม.1/1') document.getElementById('tfilter-1-1').classList.add('active');
+        if (cls === 'ม.1/2') document.getElementById('tfilter-1-2').classList.add('active');
+        this.refreshData();
+      },
+
+      search(val) {
+        this.searchKeyword = val;
+        this.refreshData();
+      },
+
+      exportCSV() {
+        if (StemDB.mode === 'server') {
+          window.location.href = '/api/export-csv';
+        } else {
+          // Generate client-side CSV
+          const rows = [
+            ["ลำดับ", "ห้อง", "เลขที่", "รหัสนักเรียน", "ชื่อ-สกุล", "คะแนนควิซรวม (20)", "ดาวสะสม (20)", "ผลการประเมิน"]
+          ];
+          this.dataCache.forEach((s, idx) => {
+            const full = `${s.prefix}${s.first_name} ${s.last_name}`;
+            const stars = s.total_stars || 0;
+            let tier = "กำลังเริ่มต้น";
+            if (stars >= 18) tier = "ยอดเยี่ยม";
+            else if (stars >= 12) tier = "ดีมาก";
+            else if (stars >= 8) tier = "ผ่านเกณฑ์";
+
+            rows.push([idx + 1, s.classroom, s.roll_number, s.student_code, `"${full}"`, s.total_quiz_score || 0, stars, `"${tier}"`]);
+          });
+          const csvContent = "\ufeff" + rows.map(e => e.join(",")).join("\n");
+          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = `stem_student_scores_${new Date().toISOString().slice(0, 10)}.csv`;
+          link.click();
+        }
+      }
+    };
     const LeverLab = {
       scale: 70,
       originX: 380,
@@ -2086,7 +3898,7 @@
           document.getElementById('predict-feedback-title').innerHTML = '🎉 ถูกต้องแม่นยำ!';
           document.getElementById('predict-feedback-text').innerHTML = sc.explanation;
         } else {
-          Sound.wrongTone();
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers);
           fbBox.className = 'predict-result-box incorrect';
           document.getElementById('predict-feedback-title').innerHTML = '🧐 ผลการทดลองจริงเป็นอีกแบบหนึ่ง ลองสังเกตดูสิ!';
           document.getElementById('predict-feedback-text').innerHTML = `${sc.explanation} (สังเกตผลการจำลองบนคานจริง)`;
@@ -2136,7 +3948,7 @@
             App.awardStar('lever', 'm1');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `ยังไม่สมดุลนะ! โมเมนต์ซ้าย = ${momentL.toFixed(1)} โมเมนต์ขวา = ${momentR.toFixed(1)} ลองเลื่อนลูกตุ้ม 2 กก. ไปที่ระยะ 3.0 ม. ดูสิ`;
           }
@@ -2147,7 +3959,7 @@
             App.awardStar('lever', 'm2');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `ยังไม่ผ่านนะ! ต้องใช้แรงไม่เกิน 3 กก. และปรับให้คานสมดุลพอดี`;
           }
@@ -2158,7 +3970,7 @@
             App.awardStar('lever', 'm3');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `ยังไม่ถูกต้องนะ! 18 กก. × 0.8 ม. = 14.4 ดังนั้นที่ระยะ 2.4 ม. ต้องออกแรง 14.4 ÷ 2.4 = 6 กิโลกรัม`;
           }
@@ -2200,9 +4012,9 @@
         if (score === 4) {
           Sound.correctFanfare();
           summary.innerHTML += ` 🎉 รับดาวควิซไปเลย ⭐`;
-          App.awardStar('lever', 'quiz');
+          if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers); App.awardStar('lever', 'quiz');
         } else {
-          Sound.wrongTone();
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'lever', 'คาน (Lever)', score, 4, answers);
         }
       }
     };
@@ -2210,7 +4022,8 @@
     /* ==========================================================================
        ROOM 2: PULLEY LAB ENGINE (ห้องปฏิบัติการรอก)
        ========================================================================== */
-    const PulleyLab = {
+    
+const PulleyLab = {
       state: {
         type: 'fixed', // 'fixed' | 'movable' | 'compound'
         strands: 4,    // for compound: 2 to 6
@@ -2601,7 +4414,7 @@
           document.getElementById('pulley-predict-fb-title').innerHTML = '🎉 ถูกต้องแม่นยำ!';
           document.getElementById('pulley-predict-fb-text').innerHTML = sc.explanation;
         } else {
-          Sound.wrongTone();
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers);
           fbBox.className = 'predict-result-box incorrect';
           document.getElementById('pulley-predict-fb-title').innerHTML = '🧐 คำตอบจริงเป็นอีกแบบ ลองดูการจำลองสิ!';
           document.getElementById('pulley-predict-fb-text').innerHTML = `${sc.explanation} (สังเกตผลที่แผงวัดผลสด)`;
@@ -2644,7 +4457,7 @@
             App.awardStar('pulley', 'm1');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = 'ยังไม่ผ่านนะ! ต้องเลือกรอกเดี่ยวเคลื่อนที่ เพื่อให้ทุ่นแรงครึ่งหนึ่งเหลือ 15 กก.';
           }
@@ -2656,7 +4469,7 @@
             App.awardStar('pulley', 'm2');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `แรงที่ใช้อยู่ที่ ${currentForce.toFixed(1)} กก. ยังเกิน 15 กก. อยู่! แนะนำให้ใช้รอกพวงที่มีเชือกอย่างน้อย 4 เส้นนะ`;
           }
@@ -2668,7 +4481,7 @@
             App.awardStar('pulley', 'm3');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = 'ยังไม่ครบเงื่อนไขนะ! ต้องใช้รอกพวง 5 เส้น มวล 50 กก. และปรับความสูงให้เป็น 1.2 เมตร';
           }
@@ -2710,9 +4523,9 @@
         if (score === 4) {
           Sound.correctFanfare();
           summary.innerHTML += ` 🎉 รับดาวควิซไปเลย ⭐`;
-          App.awardStar('pulley', 'quiz');
+          if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers); App.awardStar('pulley', 'quiz');
         } else {
-          Sound.wrongTone();
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'pulley', 'รอก (Pulley)', score, 4, answers);
         }
       }
     };
@@ -2720,7 +4533,8 @@
     /* ==========================================================================
        ROOM 3: INCLINE LAB ENGINE (ห้องปฏิบัติการทางลาด)
        ========================================================================== */
-    const InclineLab = {
+    
+const InclineLab = {
       state: {
         height: 1.2,    // meters (0.5 to 2.4m)
         length: 3.6,    // meters (1.5 to 6.0m)
@@ -3045,7 +4859,7 @@
           document.getElementById('incline-predict-fb-title').innerHTML = '🎉 ถูกต้องแม่นยำ!';
           document.getElementById('incline-predict-fb-text').innerHTML = sc.explanation;
         } else {
-          Sound.wrongTone();
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers);
           fbBox.className = 'predict-result-box incorrect';
           document.getElementById('incline-predict-fb-title').innerHTML = '🧐 ผลจริงเป็นอีกแบบหนึ่ง ลองสังเกตดูสิ!';
           document.getElementById('incline-predict-fb-text').innerHTML = `${sc.explanation} (สังเกตผลที่แผงวัดผลสด)`;
@@ -3094,7 +4908,7 @@
             App.awardStar('incline', 'm1');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `แรงดันตอนนี้คือ ${totalForceKg.toFixed(1)} กก. (เกิน 10 กก.) ลองเพิ่มความยาวทางลาดให้ยาวขึ้นอย่างน้อย 3.0 เมตรดูสิ`;
           }
@@ -3105,7 +4919,7 @@
             App.awardStar('incline', 'm2');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `แรงดันตอนนี้อยู่ที่ ${totalForceKg.toFixed(1)} กก. (ยังเกิน 15 กก.) แนะนำให้ปรับทางลาดยาวอย่างน้อย 4.8 เมตรนะ`;
           }
@@ -3116,7 +4930,7 @@
             App.awardStar('incline', 'm3');
             this.updateMissionsUI();
           } else {
-            Sound.wrongTone();
+            Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers);
             fb.style.color = '#dc2626';
             fb.textContent = `ยังไม่ผ่านนะ! เปิดโหมดพื้นไม้หยาบ แรงดันตอนนี้คือ ${totalForceKg.toFixed(1)} กก. (เป้าหมายคือไม่เกิน 25 กก.) ลองเพิ่มความยาวทางลาดดูสิ`;
           }
@@ -3158,13 +4972,775 @@
         if (score === 4) {
           Sound.correctFanfare();
           summary.innerHTML += ` 🎉 รับดาวควิซไปเลย ⭐`;
-          App.awardStar('incline', 'quiz');
+          if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers); App.awardStar('incline', 'quiz');
+        } else {
+          Sound.wrongTone(); if (App.activeStudent) StemDB.saveQuizScore(App.activeStudent.id, 'incline', 'ทางลาด (Incline)', score, 4, answers);
+        }
+      }
+    };
+
+    
+    /* ==========================================================================
+       ROOM 4: GEARS LAB ENGINE (ห้องปฏิบัติการเฟือง)
+       ========================================================================== */
+    const GearsLab = {
+      state: {
+        teethA: 24,
+        teethB: 24,
+        rpmA: 30,
+        hasIdler: false,
+        angleA: 0,
+        angleB: 0,
+        angleC: 0,
+        isPlaying: true,
+        lastTime: null,
+        animFrame: null
+      },
+      predictionState: {
+        currentScenario: 0,
+        selectedOption: null,
+        scenarios: [
+          {
+            title: "สถานการณ์ที่ 1: ปั่นจักรยานขึ้นภูเขาสูงชัน...",
+            desc: "นักเรียนต้องการปั่นจักรยานขึ้นเนินสูงชันมาก เพื่อให้ 'ผ่อนแรงขาได้มากที่สุด' ควรเลือกขนาดจานหน้า (เฟืองขับ) และเฟืองหลัง (เฟืองตาม) อย่างไร?",
+            options: [
+              "จานหน้าเล็ก ขับเฟืองหลังใหญ่ (อัตราทด > 1 ได้แรงบิดสูงสุด)",
+              "จานหน้าใหญ่ ขับเฟืองหลังเล็ก (อัตราทด < 1 ได้ความเร็วสูงสุด)",
+              "จานหน้าและเฟืองหลังขนาดเท่ากันเสมอ"
+            ],
+            correct: 0,
+            setup: { teethA: 12, teethB: 36, hasIdler: false },
+            explanation: "ถูกต้องเก่งมาก! จานหน้าเล็กขับเฟืองหลังใหญ่ อัตราทด i = 36/12 = 3.0 เพิ่มแรงบิดให้ล้อ 3 เท่าตัว ทำให้เราออกแรงกดบันไดเพียงนิดเดียวก็พาจักรยานขึ้นเนินชันได้ (แลกกับต้องควงขาหลายรอบขึ้น!)"
+          },
+          {
+            title: "สถานการณ์ที่ 2: ต้องการเร่งความเร็วพัดลมด้วยมอเตอร์...",
+            desc: "มอเตอร์หมุนที่ 30 RPM หากต้องการให้ใบพัด (เฟืองตาม B) หมุนเร็วขึ้นเป็น 60 RPM (เร็วขึ้น 2 เท่า) ต้องจัดฟันเฟืองอย่างไร?",
+            options: [
+              "เฟืองขับ A ต้องมี 12 ฟัน ขับเฟืองตาม B มี 24 ฟัน",
+              "เฟืองขับ A ต้องมี 24 ฟัน ขับเฟืองตาม B มี 12 ฟัน (ฟันขับมากกว่า 2 เท่า)",
+              "ใส่เฟืองสะพานคั่นตรงกลาง 5 ตัว"
+            ],
+            correct: 1,
+            setup: { teethA: 24, teethB: 12, hasIdler: false },
+            explanation: "ยอดเยี่ยมมาก! เมื่อเฟืองขับขนาดใหญ่ (24 ฟัน) หมุน 1 รอบ จะพาเฟืองตามขนาดเล็ก (12 ฟัน) หมุนไปได้ถึง 2 รอบเต็ม ทำให้ความเร็วรอบเพิ่มเป็น 2 เท่าตัว (60 RPM)!"
+          }
+        ]
+      },
+
+      init() {
+        this.renderGears();
+        this.updateTelemetry();
+        this.renderPrediction();
+        this.updateMissionsUI();
+        this.startLoop();
+      },
+
+      switchTab(tabId) {
+        Sound.click();
+        const tabs = ['explore', 'types', 'predict', 'missions', 'quiz'];
+        tabs.forEach(t => {
+          const panel = document.getElementById(`gears-tab-${t}`);
+          if (panel) panel.classList.remove('active');
+        });
+        const targetPanel = document.getElementById(`gears-tab-${tabId}`);
+        if (targetPanel) targetPanel.classList.add('active');
+
+        // Update tab buttons
+        const nav = document.querySelector('#view-gears .room-tabs-nav');
+        if (nav) {
+          const btns = nav.querySelectorAll('.tab-btn');
+          tabs.forEach((t, i) => {
+            if (btns[i]) btns[i].classList.toggle('active', t === tabId);
+          });
+        }
+      },
+
+      onControlChange() {
+        this.state.teethA = Number(document.getElementById('slider-teeth-a').value);
+        this.state.teethB = Number(document.getElementById('slider-teeth-b').value);
+        this.state.rpmA = Number(document.getElementById('slider-rpm-a').value);
+
+        document.getElementById('gval-teeth-a').textContent = `${this.state.teethA} ฟัน`;
+        document.getElementById('gval-teeth-b').textContent = `${this.state.teethB} ฟัน`;
+        document.getElementById('gval-rpm-a').textContent = `${this.state.rpmA} RPM`;
+
+        this.renderGears();
+        this.updateTelemetry();
+      },
+
+      toggleIdler() {
+        Sound.click();
+        this.state.hasIdler = document.getElementById('check-idler-gear').checked;
+        this.renderGears();
+        this.updateTelemetry();
+      },
+
+      togglePlay() {
+        Sound.click();
+        this.state.isPlaying = !this.state.isPlaying;
+        const btn = document.getElementById('btn-gears-play');
+        btn.textContent = this.state.isPlaying ? '⏸️ หยุดหมุน' : '▶️ เล่นต่อ';
+      },
+
+      createGearPath(radius, teeth) {
+        const points = [];
+        const step = (Math.PI * 2) / teeth;
+        const toothH = 14;
+        const innerR = radius - toothH / 2;
+        const outerR = radius + toothH / 2;
+
+        for (let i = 0; i < teeth; i++) {
+          const a0 = i * step;
+          const a1 = a0 + step * 0.25;
+          const a2 = a0 + step * 0.5;
+          const a3 = a0 + step * 0.75;
+          const a4 = (i + 1) * step;
+
+          points.push(`${Math.cos(a0) * innerR},${Math.sin(a0) * innerR}`);
+          points.push(`${Math.cos(a1) * outerR},${Math.sin(a1) * outerR}`);
+          points.push(`${Math.cos(a2) * outerR},${Math.sin(a2) * outerR}`);
+          points.push(`${Math.cos(a3) * innerR},${Math.sin(a3) * innerR}`);
+          points.push(`${Math.cos(a4) * innerR},${Math.sin(a4) * innerR}`);
+        }
+        return `M ${points.join(' L ')} Z`;
+      },
+
+      renderGears() {
+        const driverG = document.getElementById('gear-driver-group');
+        const drivenG = document.getElementById('gear-driven-group');
+        const idlerG = document.getElementById('gear-idler-group');
+
+        driverG.innerHTML = '';
+        drivenG.innerHTML = '';
+        idlerG.innerHTML = '';
+
+        const rA = this.state.teethA * 3.4;
+        const rB = this.state.teethB * 3.4;
+        const rIdler = 18 * 3.4; // 18 teeth for idler
+
+        let posAX, posAY, posBX, posBY, posCX, posCY;
+
+        if (!this.state.hasIdler) {
+          idlerG.style.display = 'none';
+          const totalDist = rA + rB;
+          const midX = 380;
+          posAX = midX - (totalDist / 2) + (rA - rB) * 0.2;
+          posAY = 190;
+          posBX = posAX + totalDist;
+          posBY = 190;
+        } else {
+          idlerG.style.display = 'block';
+          posCX = 380;
+          posCY = 190;
+          posAX = posCX - (rA + rIdler);
+          posAY = 190;
+          posBX = posCX + (rB + rIdler);
+          posBY = 190;
+
+          // Render Idler C
+          const pathC = this.createGearPath(rIdler, 18);
+          idlerG.innerHTML = `
+            <g id="gearC-rotator" transform="translate(${posCX}, ${posCY})">
+              <path d="${pathC}" fill="url(#gearC-grad)" stroke="#b45309" stroke-width="2" filter="url(#gear-shadow)" />
+              <circle cx="0" cy="0" r="16" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+              <circle cx="0" cy="0" r="6" fill="#78350f" />
+              <text x="0" y="32" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="11" fill="#92400e">เฟืองสะพาน C (18ฟัน)</text>
+            </g>
+          `;
+        }
+
+        // Render Gear A
+        const pathA = this.createGearPath(rA, this.state.teethA);
+        driverG.innerHTML = `
+          <g id="gearA-rotator" transform="translate(${posAX}, ${posAY})">
+            <path d="${pathA}" fill="url(#gearA-grad)" stroke="#1e40af" stroke-width="2.5" filter="url(#gear-shadow)" />
+            <circle cx="0" cy="0" r="${Math.max(16, rA * 0.35)}" fill="#dbeafe" stroke="#2563eb" stroke-width="2" />
+            <circle cx="0" cy="0" r="6" fill="#1e3a8a" />
+            <line x1="0" y1="0" x2="${rA * 0.7}" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+            <text x="0" y="5" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="12" fill="#1e3a8a">${this.state.teethA}T</text>
+          </g>
+        `;
+
+        // Render Gear B
+        const pathB = this.createGearPath(rB, this.state.teethB);
+        drivenG.innerHTML = `
+          <g id="gearB-rotator" transform="translate(${posBX}, ${posBY})">
+            <path d="${pathB}" fill="url(#gearB-grad)" stroke="#065f46" stroke-width="2.5" filter="url(#gear-shadow)" />
+            <circle cx="0" cy="0" r="${Math.max(16, rB * 0.35)}" fill="#d1fae5" stroke="#059669" stroke-width="2" />
+            <circle cx="0" cy="0" r="6" fill="#064e3b" />
+            <line x1="0" y1="0" x2="${rB * 0.7}" y2="0" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+            <text x="0" y="5" text-anchor="middle" font-family="Prompt" font-weight="700" font-size="12" fill="#064e3b">${this.state.teethB}T</text>
+          </g>
+        `;
+
+        this.gearPositions = { posAX, posAY, posBX, posBY, posCX, posCY };
+      },
+
+      updateTelemetry() {
+        const ratio = this.state.teethB / this.state.teethA;
+        const rpmB = Math.round(this.state.rpmA / ratio);
+
+        document.getElementById('gval-ratio').textContent = `${ratio.toFixed(2)} : 1`;
+        document.getElementById('gval-rpm-b').textContent = `${rpmB} RPM`;
+
+        const dirEl = document.getElementById('gval-direction');
+        const effEl = document.getElementById('gval-effect');
+        const badgeText = document.getElementById('gears-status-text');
+
+        if (!this.state.hasIdler) {
+          dirEl.textContent = 'ทวนเข็ม ↺ (กลับทิศ)';
+          dirEl.style.color = 'var(--purple)';
+        } else {
+          dirEl.textContent = 'ตามเข็ม ↻ (ทิศเดียวกัน)';
+          dirEl.style.color = 'var(--success)';
+        }
+
+        if (ratio > 1.0) {
+          effEl.textContent = `เพิ่มแรงบิด ${ratio.toFixed(1)} เท่า (หมุนช้าลง)`;
+          effEl.style.color = '#059669';
+          badgeText.textContent = `อัตราทด ${ratio.toFixed(2)} : เพิ่มแรงบิดสูง เหมาะสำหรับขึ้นทางชัน`;
+        } else if (ratio < 1.0) {
+          effEl.textContent = `เพิ่มความเร็วรอบ ${(1/ratio).toFixed(1)} เท่า`;
+          effEl.style.color = '#2563eb';
+          badgeText.textContent = `อัตราทด ${ratio.toFixed(2)} : เร่งความเร็วรอบ เหมาะสำหรับทางราบ`;
+        } else {
+          effEl.textContent = 'ส่งต่อแรง (ความเร็วเท่าเดิม)';
+          effEl.style.color = 'var(--text-main)';
+          badgeText.textContent = 'อัตราทด 1.0 : ถ่ายทอดกำลังโดยไม่เปลี่ยนความเร็ว';
+        }
+      },
+
+      startLoop() {
+        const loop = (now) => {
+          if (!this.state.lastTime) this.state.lastTime = now;
+          const dt = (now - this.state.lastTime) / 1000;
+          this.state.lastTime = now;
+
+          if (this.state.isPlaying && dt < 0.2) {
+            const speedA = (this.state.rpmA * 360) / 60; // deg/sec
+            const ratio = this.state.teethB / this.state.teethA;
+            const speedB = speedA / ratio;
+
+            this.state.angleA = (this.state.angleA + speedA * dt) % 360;
+
+            if (!this.state.hasIdler) {
+              this.state.angleB = (this.state.angleB - speedB * dt) % 360;
+            } else {
+              const speedC = speedA / (18 / this.state.teethA);
+              this.state.angleC = (this.state.angleC - speedC * dt) % 360;
+              this.state.angleB = (this.state.angleB + speedB * dt) % 360;
+            }
+
+            const rotA = document.getElementById('gearA-rotator');
+            const rotB = document.getElementById('gearB-rotator');
+            const rotC = document.getElementById('gearC-rotator');
+
+            if (rotA && this.gearPositions) rotA.setAttribute('transform', `translate(${this.gearPositions.posAX}, ${this.gearPositions.posAY}) rotate(${this.state.angleA})`);
+            if (rotB && this.gearPositions) rotB.setAttribute('transform', `translate(${this.gearPositions.posBX}, ${this.gearPositions.posBY}) rotate(${this.state.angleB})`);
+            if (rotC && this.gearPositions) rotC.setAttribute('transform', `translate(${this.gearPositions.posCX}, ${this.gearPositions.posCY}) rotate(${this.state.angleC})`);
+          }
+
+          this.state.animFrame = requestAnimationFrame(loop);
+        };
+        this.state.animFrame = requestAnimationFrame(loop);
+      },
+
+      renderPrediction() {
+        const sc = this.predictionState.scenarios[this.predictionState.currentScenario];
+        if (!sc) return;
+        document.getElementById('gears-predict-title').textContent = sc.title;
+        document.getElementById('gears-predict-desc').textContent = sc.desc;
+        const container = document.getElementById('gears-predict-options');
+        container.innerHTML = '';
+        sc.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'predict-btn-choice';
+          btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> <span>${opt}</span>`;
+          btn.onclick = () => this.checkPrediction(idx);
+          container.appendChild(btn);
+        });
+        document.getElementById('gears-predict-feedback').style.display = 'none';
+      },
+
+      checkPrediction(idx) {
+        Sound.click();
+        const sc = this.predictionState.scenarios[this.predictionState.currentScenario];
+        const fb = document.getElementById('gears-predict-feedback');
+        fb.style.display = 'block';
+
+        if (idx === sc.correct) {
+          Sound.correctFanfare();
+          fb.className = 'predict-feedback-card correct';
+          fb.innerHTML = `🎉 <strong>ถูกต้องยอดเยี่ยม!</strong> ${sc.explanation}`;
+          setTimeout(() => {
+            this.predictionState.currentScenario = (this.predictionState.currentScenario + 1) % this.predictionState.scenarios.length;
+            this.renderPrediction();
+          }, 4500);
+        } else {
+          Sound.wrongTone();
+          fb.className = 'predict-feedback-card wrong';
+          fb.innerHTML = `❌ <strong>ยังไม่ถูกต้องนะ!</strong> ลองคิดใหม่อีกครั้ง: คำนวณอัตราทด i = ฟันตาม ÷ ฟันขับ`;
+        }
+      },
+
+      verifyMission(num) {
+        Sound.click();
+        const fb = document.getElementById(`gmfb-${num}`);
+        fb.style.display = 'block';
+        const ratio = this.state.teethB / this.state.teethA;
+
+        if (num === 1) {
+          if (ratio >= 2.0) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = `ยอดเยี่ยมมาก! อัตราทดปัจจุบันคือ ${ratio.toFixed(2)} (≥ 2.0) เพิ่มแรงบิดมากกว่า 2 เท่าสำเร็จ!`;
+            App.awardStar('gears', 'm1');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = `ยังไม่ผ่านนะ! อัตราทดตอนนี้คือ ${ratio.toFixed(2)} (เป้าหมายคือ ≥ 2.0) ลองเลือกเฟืองขับ A ให้เล็กลง และเฟืองตาม B ให้ใหญ่ขึ้น`;
+          }
+        } else if (num === 2) {
+          if (ratio <= 0.5) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = `สำเร็จยอดเยี่ยม! อัตราทดคือ ${ratio.toFixed(2)} (≤ 0.5) เฟืองตามหมุนเร็วกว่าเฟืองขับเกิน 2 เท่าตัว!`;
+            App.awardStar('gears', 'm2');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = `ยังไม่ผ่าน! อัตราทดตอนนี้คือ ${ratio.toFixed(2)} (เป้าหมายคือ ≤ 0.5) ลองเลือกเฟืองขับ A ขนาดใหญ่ (36T) ขับเฟืองตาม B ขนาดเล็ก (12T)`;
+          }
+        } else if (num === 3) {
+          if (this.state.hasIdler) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = `ถูกต้อง! เมื่อใส่เฟืองสะพาน Idler C เฟืองขับและเฟืองตามจะหมุนตามเข็มนาฬิกาไปในทิศทางเดียวกันทันที!`;
+            App.awardStar('gears', 'm3');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = `ยังไม่เปิดใช้งานเฟืองสะพาน! กรุณาติ๊กเลือก "แทรก เฟืองสะพาน (Idler C)" ในแผงตั้งค่า`;
+          }
+        }
+      },
+
+      updateMissionsUI() {
+        const stars = App.state.stars.gears || {};
+        ['m1', 'm2', 'm3'].forEach((mKey, idx) => {
+          const num = idx + 1;
+          const card = document.getElementById(`gmission-card-${num}`);
+          const starIcon = document.getElementById(`gmstar-${num}`);
+          if (card && starIcon) {
+            if (stars[mKey]) {
+              card.classList.add('completed');
+              starIcon.textContent = '⭐ ได้รับแล้ว!';
+            } else {
+              card.classList.remove('completed');
+              starIcon.textContent = '⭐';
+            }
+          }
+        });
+      },
+
+      submitQuiz() {
+        Sound.click();
+        const form = document.getElementById('gears-quiz-form');
+        const answers = { gq1: 'a', gq2: 'b', gq3: 'a', gq4: 'a' };
+        let score = 0;
+        const submittedAnswers = {};
+
+        ['gq1', 'gq2', 'gq3', 'gq4'].forEach(q => {
+          const selected = form.elements[q].value;
+          submittedAnswers[q] = selected;
+          document.getElementById(`exp-${q}`).style.display = 'block';
+          form.querySelectorAll(`input[name="${q}"]`).forEach(r => {
+            const lbl = r.parentElement;
+            lbl.classList.remove('correct-answer', 'wrong-answer');
+            if (r.value === answers[q]) lbl.classList.add('correct-answer');
+            else if (r.checked && r.value !== answers[q]) lbl.classList.add('wrong-answer');
+          });
+          if (selected === answers[q]) score++;
+        });
+
+        const summary = document.getElementById('gears-quiz-summary');
+        summary.innerHTML = `ได้คะแนน: ${score} / 4 คะแนน`;
+
+        if (App.activeStudent) {
+          StemDB.saveQuizScore(App.activeStudent.id, 'gears', 'เฟือง (Gears)', score, 4, submittedAnswers);
+        }
+
+        if (score === 4) {
+          Sound.correctFanfare();
+          summary.innerHTML += ` 🎉 รับดาวควิซไปเลย ⭐ (บันทึกลง Database เรียบร้อย)`;
+          App.awardStar('gears', 'quiz');
         } else {
           Sound.wrongTone();
         }
       }
     };
 
+    /* ==========================================================================
+       ROOM 5: ROBOTIC ARM LAB ENGINE (ห้องปฏิบัติการแขนกล)
+       ========================================================================== */
+    const ArmLab = {
+      state: {
+        baseX: 160,
+        baseY: 280,
+        len1: 130, // px
+        len2: 120, // px
+        angle1: 45, // deg
+        angle2: 50, // deg
+        gripperClosed: false,
+        box: {
+          x: 340,
+          y: 280,
+          width: 50,
+          height: 50,
+          isHeld: false,
+          placedOnShelf: false
+        }
+      },
+      predictionState: {
+        currentScenario: 0,
+        scenarios: [
+          {
+            title: "สถานการณ์ที่ 1: การเหยียดแขนตรง vs การงอแขนแนบชิดตัว...",
+            desc: "เมื่อเราถือดัมเบลล์หนัก 5 กก. ไว้ในมือ ระหว่าง 'งอแขนแนบชิดลำตัว' กับ 'เหยียดแขนตรงขนานพื้นไปข้างหน้า' ท่าไหนกล้ามเนื้อและข้อต่อต้องออกแรงมากกว่ากัน?",
+            options: [
+              "เหยียดแขนตรงขนานพื้น ต้องออกแรงกล้ามเนื้อมากกว่ามหาศาล",
+              "งอแขนแนบชิดตัว ต้องออกแรงมากกว่า",
+              "ทั้งสองท่ากล้ามเนื้อออกแรงเท่ากัน เพราะดัมเบลล์หนัก 5 กก. เท่าเดิม"
+            ],
+            correct: 0,
+            explanation: "ถูกต้องยอดเยี่ยม! เมื่อเหยียดแขนตรง ระยะแขนของแรงต้าน (L) จากข้อศอกถึงดัมเบลล์จะยาวที่สุด ทำให้เกิดโมเมนต์หมุน M = F × L สูงมาก กล้ามเนื้อจึงต้องออกแรงดึงมากกว่าหลายเท่า!"
+          },
+          {
+            title: "สถานการณ์ที่ 2: ประโยชน์ของคานอันดับ 3 ในแขนกล...",
+            desc: "ทำไมแขนกลอุตสาหกรรมและแขนมนุษย์จึงออกแบบเป็นคานอันดับ 3 ทั้งๆ ที่ M.A. < 1 (ไม่ผ่อนแรง)?",
+            options: [
+              "เพื่อประหยัดพลังงานทั้งหมดให้เหลือศูนย์",
+              "เพื่อเพิ่มระยะทางและความเร็วในการเคลื่อนที่ของปลายมือจับ",
+              "เพื่อให้โครงสร้างมีน้ำหนักเบาขึ้นเพียงอย่างเดียว"
+            ],
+            correct: 1,
+            explanation: "เก่งมาก! คานอันดับ 3 แม้ต้องใช้แรงขับสูง แต่กระบอกสูบหดตัวเพียงนิดเดียว ปลายมือจะกวาดไปได้ไกลและเร็วมาก ทำให้ทำงานคีบจับได้ว่องไวสุดๆ"
+          }
+        ]
+      },
+
+      init() {
+        this.renderArm();
+        this.updateTelemetry();
+        this.renderPrediction();
+        this.updateMissionsUI();
+      },
+
+      switchTab(tabId) {
+        Sound.click();
+        const tabs = ['explore', 'theory', 'predict', 'missions', 'quiz'];
+        tabs.forEach(t => {
+          const panel = document.getElementById(`arm-tab-${t}`);
+          if (panel) panel.classList.remove('active');
+        });
+        const targetPanel = document.getElementById(`arm-tab-${tabId}`);
+        if (targetPanel) targetPanel.classList.add('active');
+
+        const nav = document.querySelector('#view-arm .room-tabs-nav');
+        if (nav) {
+          const btns = nav.querySelectorAll('.tab-btn');
+          tabs.forEach((t, i) => {
+            if (btns[i]) btns[i].classList.toggle('active', t === tabId);
+          });
+        }
+      },
+
+      onControlChange() {
+        this.state.angle1 = Number(document.getElementById('slider-arm-joint1').value);
+        this.state.angle2 = Number(document.getElementById('slider-arm-joint2').value);
+
+        document.getElementById('aval-joint1').textContent = `${this.state.angle1}°`;
+        document.getElementById('aval-joint2').textContent = `${this.state.angle2}°`;
+
+        this.renderArm();
+        this.updateTelemetry();
+      },
+
+      resetPosition() {
+        Sound.click();
+        this.state.angle1 = 45;
+        this.state.angle2 = 50;
+        this.state.gripperClosed = false;
+        this.state.box = { x: 340, y: 280, width: 50, height: 50, isHeld: false, placedOnShelf: false };
+
+        document.getElementById('slider-arm-joint1').value = 45;
+        document.getElementById('slider-arm-joint2').value = 50;
+        document.getElementById('aval-joint1').textContent = '45°';
+        document.getElementById('aval-joint2').textContent = '50°';
+        document.getElementById('btn-gripper-action').innerHTML = '🤏 <span>สั่ง "คีบจับกล่อง"</span>';
+
+        this.renderArm();
+        this.updateTelemetry();
+      },
+
+      toggleGripper() {
+        Sound.click();
+        const coords = this.getEndEffectorCoords();
+        const boxX = this.state.box.x + 25;
+        const boxY = this.state.box.y + 25;
+        const dist = Math.hypot(coords.x - boxX, coords.y - boxY);
+
+        if (!this.state.box.isHeld) {
+          // Attempt to grip
+          if (dist < 45) {
+            this.state.gripperClosed = true;
+            this.state.box.isHeld = true;
+            this.state.box.placedOnShelf = false;
+            Sound.balancedDing();
+            document.getElementById('btn-gripper-action').innerHTML = '👐 <span>สั่ง "ปล่อยกล่อง"</span>';
+            document.getElementById('gripper-hint').textContent = 'คีบกล่องสำเร็จ! ปรับมุมข้อต่อเพื่อยกขึ้นหรือวางบนชั้นวาง';
+          } else {
+            Sound.wrongTone();
+            document.getElementById('gripper-hint').textContent = `อยู่ห่างกล่องเกินไป (${Math.round(dist)} px) ปรับมือจับให้ใกล้กล่องกว่านี้`;
+          }
+        } else {
+          // Release
+          this.state.gripperClosed = false;
+          this.state.box.isHeld = false;
+          document.getElementById('btn-gripper-action').innerHTML = '🤏 <span>สั่ง "คีบจับกล่อง"</span>';
+
+          // Check if released near target shelf (X >= 570 and Y <= 230)
+          if (coords.x >= 560 && coords.y <= 230) {
+            this.state.box.placedOnShelf = true;
+            this.state.box.x = 615;
+            this.state.box.y = 150;
+            Sound.correctFanfare();
+            document.getElementById('gripper-hint').textContent = '🎉 ยอดเยี่ยม! กล่องถูกวางลงบนชั้นวางเป้าหมายสำเร็จ';
+          } else {
+            // Drop to floor
+            this.state.box.y = 280;
+            document.getElementById('gripper-hint').textContent = 'ปล่อยกล่องลงสู่พื้นเรียบร้อย';
+          }
+        }
+
+        this.renderArm();
+        this.updateTelemetry();
+      },
+
+      getEndEffectorCoords() {
+        const rad1 = (this.state.angle1 * Math.PI) / 180;
+        const x1 = this.state.baseX + Math.cos(rad1) * this.state.len1;
+        const y1 = this.state.baseY - Math.sin(rad1) * this.state.len1;
+
+        const rad2 = ((this.state.angle1 - this.state.angle2) * Math.PI) / 180;
+        const x2 = x1 + Math.cos(rad2) * this.state.len2;
+        const y2 = y1 - Math.sin(rad2) * this.state.len2;
+
+        return { x: x2, y: y2, elbowX: x1, elbowY: y1 };
+      },
+
+      renderArm() {
+        const c = this.getEndEffectorCoords();
+        const armG = document.getElementById('arm-segments-group');
+        const boxEl = document.getElementById('arm-payload-box');
+
+        // Link 1 (Lower Arm)
+        const link1 = `<line x1="${this.state.baseX}" y1="${this.state.baseY}" x2="${c.elbowX}" y2="${c.elbowY}" stroke="url(#arm-metal)" stroke-width="22" stroke-linecap="round" />`;
+        // Hydraulic Cylinder 1
+        const cyl1 = `<line x1="${this.state.baseX + 15}" y1="${this.state.baseY - 10}" x2="${c.elbowX - 20}" y2="${c.elbowY + 20}" stroke="url(#cylinder-grad)" stroke-width="8" stroke-linecap="round" />`;
+
+        // Link 2 (Upper Arm)
+        const link2 = `<line x1="${c.elbowX}" y1="${c.elbowY}" x2="${c.x}" y2="${c.y}" stroke="url(#arm-metal)" stroke-width="16" stroke-linecap="round" />`;
+
+        // Joints
+        const jElbow = `<circle cx="${c.elbowX}" cy="${c.elbowY}" r="12" fill="#3b82f6" stroke="#1d4ed8" stroke-width="2.5" />`;
+        const jWrist = `<circle cx="${c.x}" cy="${c.y}" r="8" fill="#ec4899" stroke="#be185d" stroke-width="2" />`;
+
+        // Gripper Claws
+        const clawOffset = this.state.gripperClosed ? 4 : 12;
+        const claws = `
+          <line x1="${c.x}" y1="${c.y}" x2="${c.x + 10}" y2="${c.y + clawOffset}" stroke="#be185d" stroke-width="5" stroke-linecap="round" />
+          <line x1="${c.x}" y1="${c.y}" x2="${c.x + 10}" y2="${c.y - clawOffset}" stroke="#be185d" stroke-width="5" stroke-linecap="round" />
+        `;
+
+        armG.innerHTML = link1 + cyl1 + link2 + jElbow + jWrist + claws;
+
+        // Update Box position
+        if (this.state.box.isHeld) {
+          this.state.box.x = c.x - 20;
+          this.state.box.y = c.y - 20;
+        }
+
+        boxEl.setAttribute('transform', `translate(${this.state.box.x - 340}, ${this.state.box.y - 280})`);
+      },
+
+      updateTelemetry() {
+        const c = this.getEndEffectorCoords();
+        const heightM = Math.max(0, (330 - c.y) / 100);
+        const reachM = (c.x - this.state.baseX) / 100;
+
+        // Force = (W * reach) / 0.20
+        const loadN = 50; // 5 kg * 10 m/s^2
+        const forceN = Math.round((loadN * Math.max(0.5, reachM)) / 0.2);
+        const ma = (0.2 / Math.max(0.5, reachM)).toFixed(2);
+
+        document.getElementById('aval-height').textContent = `${heightM.toFixed(2)} m`;
+        document.getElementById('aval-reach').textContent = `${reachM.toFixed(2)} m`;
+        document.getElementById('aval-force').textContent = `${forceN} N`;
+        document.getElementById('aval-ma').textContent = `${ma} (M.A. < 1)`;
+
+        const badge = document.getElementById('arm-status-text');
+        if (this.state.box.placedOnShelf) {
+          badge.textContent = 'ภารกิจสำเร็จ: กล่องถูกจัดวางบนชั้นวางระดับ 1.2 ม.';
+        } else if (this.state.box.isHeld) {
+          badge.textContent = `กำลังคีบกล่อง 5 kg ที่ความสูง ${heightM.toFixed(2)} ม.`;
+        } else {
+          badge.textContent = `พร้อมทำงาน: ระยะเอื้อม ${reachM.toFixed(2)} ม. | ความสูง ${heightM.toFixed(2)} ม.`;
+        }
+      },
+
+      renderPrediction() {
+        const sc = this.predictionState.scenarios[this.predictionState.currentScenario];
+        if (!sc) return;
+        document.getElementById('arm-predict-title').textContent = sc.title;
+        document.getElementById('arm-predict-desc').textContent = sc.desc;
+        const container = document.getElementById('arm-predict-options');
+        container.innerHTML = '';
+        sc.options.forEach((opt, idx) => {
+          const btn = document.createElement('button');
+          btn.className = 'predict-btn-choice';
+          btn.innerHTML = `<strong>${String.fromCharCode(65 + idx)}.</strong> <span>${opt}</span>`;
+          btn.onclick = () => this.checkPrediction(idx);
+          container.appendChild(btn);
+        });
+        document.getElementById('arm-predict-feedback').style.display = 'none';
+      },
+
+      checkPrediction(idx) {
+        Sound.click();
+        const sc = this.predictionState.scenarios[this.predictionState.currentScenario];
+        const fb = document.getElementById('arm-predict-feedback');
+        fb.style.display = 'block';
+
+        if (idx === sc.correct) {
+          Sound.correctFanfare();
+          fb.className = 'predict-feedback-card correct';
+          fb.innerHTML = `🎉 <strong>ยอดเยี่ยมมาก!</strong> ${sc.explanation}`;
+          setTimeout(() => {
+            this.predictionState.currentScenario = (this.predictionState.currentScenario + 1) % this.predictionState.scenarios.length;
+            this.renderPrediction();
+          }, 4500);
+        } else {
+          Sound.wrongTone();
+          fb.className = 'predict-feedback-card wrong';
+          fb.innerHTML = `❌ <strong>ยังไม่ถูกต้องนะ!</strong> ลองพิจารณาหลักการโมเมนต์ M = F × L เมื่อยืดแขนออกไปไกล`;
+        }
+      },
+
+      verifyMission(num) {
+        Sound.click();
+        const fb = document.getElementById(`amfb-${num}`);
+        fb.style.display = 'block';
+        const c = this.getEndEffectorCoords();
+        const heightM = (330 - c.y) / 100;
+
+        if (num === 1) {
+          if (this.state.box.isHeld) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = 'ยอดเยี่ยมมาก! ควบคุมแขนกลลงไปคีบกล่อง 5 kg สำเร็จแล้ว';
+            App.awardStar('arm', 'm1');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = 'ยังไม่ได้คีบกล่อง! เลื่อนมือจับลงไปใกล้กล่องแล้วกด "คีบจับกล่อง"';
+          }
+        } else if (num === 2) {
+          if (this.state.box.isHeld && heightM >= 1.0) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = `ยอดเยี่ยมมาก! ยกกล่องขึ้นสูง ${heightM.toFixed(2)} ม. (≥ 1.0 ม.) สำเร็จ`;
+            App.awardStar('arm', 'm2');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = `ยังไม่ผ่าน! ต้องคีบกล่องไว้และยกให้สูงเกิน 1.0 เมตร (ปัจจุบันสูง ${heightM.toFixed(2)} ม.)`;
+          }
+        } else if (num === 3) {
+          if (this.state.box.placedOnShelf) {
+            Sound.correctFanfare();
+            fb.style.color = '#059669';
+            fb.textContent = 'สุดยอดนักประดิษฐ์! สามารถวางกล่องลงบนชั้นวางเป้าหมายได้อย่างแม่นยำ';
+            App.awardStar('arm', 'm3');
+            this.updateMissionsUI();
+          } else {
+            Sound.wrongTone();
+            fb.style.color = '#dc2626';
+            fb.textContent = 'ยังไม่ได้วางบนชั้นวาง! คีบกล่องไปยังชั้นวางทางขวา แล้วกด "ปล่อยกล่อง"';
+          }
+        }
+      },
+
+      updateMissionsUI() {
+        const stars = App.state.stars.arm || {};
+        ['m1', 'm2', 'm3'].forEach((mKey, idx) => {
+          const num = idx + 1;
+          const card = document.getElementById(`amission-card-${num}`);
+          const starIcon = document.getElementById(`amstar-${num}`);
+          if (card && starIcon) {
+            if (stars[mKey]) {
+              card.classList.add('completed');
+              starIcon.textContent = '⭐ ได้รับแล้ว!';
+            } else {
+              card.classList.remove('completed');
+              starIcon.textContent = '⭐';
+            }
+          }
+        });
+      },
+
+      submitQuiz() {
+        Sound.click();
+        const form = document.getElementById('arm-quiz-form');
+        const answers = { aq1: 'a', aq2: 'b', aq3: 'a', aq4: 'a' };
+        let score = 0;
+        const submittedAnswers = {};
+
+        ['aq1', 'aq2', 'aq3', 'aq4'].forEach(q => {
+          const selected = form.elements[q].value;
+          submittedAnswers[q] = selected;
+          document.getElementById(`exp-${q}`).style.display = 'block';
+          form.querySelectorAll(`input[name="${q}"]`).forEach(r => {
+            const lbl = r.parentElement;
+            lbl.classList.remove('correct-answer', 'wrong-answer');
+            if (r.value === answers[q]) lbl.classList.add('correct-answer');
+            else if (r.checked && r.value !== answers[q]) lbl.classList.add('wrong-answer');
+          });
+          if (selected === answers[q]) score++;
+        });
+
+        const summary = document.getElementById('arm-quiz-summary');
+        summary.innerHTML = `ได้คะแนน: ${score} / 4 คะแนน`;
+
+        if (App.activeStudent) {
+          StemDB.saveQuizScore(App.activeStudent.id, 'arm', 'แขนกล (Robotic Arm)', score, 4, submittedAnswers);
+        }
+
+        if (score === 4) {
+          Sound.correctFanfare();
+          summary.innerHTML += ` 🎉 รับดาวควิซไปเลย ⭐ (บันทึกลง Database เรียบร้อย)`;
+          App.awardStar('arm', 'quiz');
+        } else {
+          Sound.wrongTone();
+        }
+      }
+    };
+    
     window.addEventListener('DOMContentLoaded', () => {
       App.init();
     });
